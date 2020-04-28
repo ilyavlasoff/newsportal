@@ -1,0 +1,10 @@
+<div class="header">
+    <a href=""><img src="" alt="logo"></a>
+    {% if app.user %}
+        <button type="button">{{ app.user }}</button>
+        <button type="button">Sign out</button>
+    {% else %}
+        <button type="button">Register</button>
+        <button type="button">Sign in</button>
+    {% endif %}
+</div>
