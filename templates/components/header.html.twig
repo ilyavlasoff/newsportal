@@ -1,10 +1,14 @@
 <div class="header">
-    <a href=""><img src="" alt="logo"></a>
-    {% if app.user %}
-        <button type="button">{{ app.user }}</button>
-        <button type="button">Sign out</button>
-    {% else %}
-        <button type="button">Register</button>
-        <button type="button">Sign in</button>
-    {% endif %}
+    <div class="header-content">
+        <a href="{{ path('main_page') }}"><img src="media/images/main_logo.png" alt="logo"></a>
+        {% if app.user %}
+            <button type="button">{{ app.user }}</button>
+            <button type="button">Sign out</button>
+        {% else %}
+            <div class="pin-right">
+                <button type="button" class="btn btn-primary hbtn">Register</button>
+                <button type="button" class="btn btn-outline-primary hbtn">Sign in</button>
+            </div>
+        {% endif %}
+    </div>
 </div>

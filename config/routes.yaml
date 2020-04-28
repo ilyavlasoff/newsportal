@@ -1,3 +1,23 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+app_register:
+    path: /register
+    controller: App\Controller\RegistrationController::register
+app_login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+app_logout:
+    path: /logout
+    controller: App\Controller\SecurityController::logout
+owner_page:
+    path: /my
+    controller: App\Controller\UserpageController::display
+about_page:
+    path: /about
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template: 'static/about.html.twig'
+        maxAge:    86400
+        sharedAge: 86400
+        private: true
+main_page:
+    path: /
+    controller: App\Controller\StartpageController::display

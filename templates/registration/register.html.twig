@@ -1,15 +1,32 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Register{% endblock %}
-
+{% block stylesheets %}
+    {{ include('common.html.twig') }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/header.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/authpages.css') }}">
+{% endblock %}
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+    {{ include('components/header.html.twig') }}
+    <div class="flex-col centered top-margined">
+        <img src="{{ asset('media/images/person-sitting.png') }}" alt="Register image" class="title-pic-sm">
+        <h1 class="title text-center">Registration</h1>
+    </div>
 
-        <button class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+
+        <div class="flex centered">
+            <div class="flex-col centered regform-box">
+                {{ form_start(registrationForm) }}
+                    {{ form_row(registrationForm.username) }}
+                    {{ form_row(registrationForm.email) }}
+                    {{ form_row(registrationForm.plainPassword) }}
+                    {{ form_row(registrationForm.agreeTerms) }}
+                    {{ form_row(registrationForm.description) }}
+                    {{ form_row(registrationForm.userPic) }}
+                <button class="btn">Register</button>
+                {{ form_end(registrationForm) }}
+                <a href="{{ path('app_login') }}" target="_self">Already registered?</a>
+            </div>
+        </div>
 {% endblock %}

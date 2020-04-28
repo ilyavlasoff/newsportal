@@ -1,0 +1,70 @@
+{% extends('base.html.twig') %}
+
+{% block title %}About NewsPortal{% endblock %}
+{% block stylesheets %}
+    {{ include('common.html.twig') }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/header.css') }}">
+{% endblock %}
+{% block body %}
+    {{ include('components/header.html.twig') }}
+    <div class="content-container">
+        <div>
+            <img src="{{ asset('media/images/referral-leader.jpg') }}" class="title-pic">
+            <h1 class="title">About NewsPortal</h1>
+        </div>
+        <h4 class="sub-title">NewsPortal - the world's leading news generation platform with open community,
+            advanced discussion opportunities and complete lack of state censorship. </h4>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ornare dui sed dolor sagittis, sit amet viverra
+            ligula viverra. Duis volutpat tortor at fringilla gravida. Quisque in tellus et risus fringilla scelerisque.
+            Integer sem lorem, varius eget maximus id, vestibulum ac diam. Phasellus malesuada velit eu arcu tempus cursus.
+            Vestibulum eu odio quis nisl suscipit tempor. Phasellus tempor, quam non vulputate placerat, lorem nulla
+            posuere magna, quis eleifend tellus lectus sit amet nunc. In auctor in massa sed tristique. Nulla consequat
+            libero nulla, at mollis velit pulvinar vel. Nunc quis tristique mi. Vivamus commodo sem sed ex vulputate, et egestas nunc laoreet.
+            Vivamus in augue pulvinar, egestas odio sit amet, pharetra nibh. Nulla pulvinar, urna sed scelerisque accumsan,
+            enim diam commodo lectus, facilisis efficitur urna lectus eleifend enim. Maecenas orci magna, tristique a
+            sollicitudin at, fermentum vel lacus. Nulla facilisi.
+        </p>
+        <p>Cras finibus ante elit, ut pharetra nulla suscipit vel.
+            Sed finibus neque a elit suscipit sodales. In hac habitasse platea dictumst. Quisque porttitor, risus vel lobortis
+            consequat, tellus urna porttitor justo, quis bibendum ipsum dui eu sem. Aenean iaculis diam a tortor tincidunt,
+            et ullamcorper nisi commodo. Pellentesque placerat, justo in efficitur viverra, lectus turpis vehicula odio,
+            amet aliquet tellus tellus et ligula. Sed felis lacus, accumsan et diam non, porttitor vestibulum purus.
+            Nullam at quam non nisl vehicula mattis ac vel arcu. Morbi lobortis vulputate semper. Nulla facilisi. Mauris
+            rutrum facilisis tempus. Praesent sollicitudin accumsan vulputate.
+        </p>
+        <p>
+            Cras et eros sit amet ex rutrum suscipit. Phasellus at porta arcu. Nunc eget nibh tincidunt, fermentum metus
+            vel, posuere nibh. Ut nec mollis ante, ac lacinia turpis. Class aptent taciti sociosqu ad litora torquent per
+            conubia nostra, per inceptos himenaeos. Phasellus ac ligula quis turpis scelerisque eleifend. Donec quis finibus
+            ligula. Curabitur et lectus imperdiet, sodales orci mollis, condimentum lacus.
+        </p>
+        <p>
+            Curabitur fermentum euismod augue, non facilisis felis. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Proin at nibh tempus, scelerisque erat eget, fringilla sem. Nunc tempor pulvinar elit, ac egestas lacus fermentum ac.
+            Sed sem turpis, consequat a consequat in, mattis id mi. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+            Nam lacinia faucibus magna quis laoreet. Praesent sit amet imperdiet nisl. Fusce aliquet neque vel quam auctor aliquet.
+            Vivamus et consectetur sapien. Morbi ac turpis placerat, mollis enim quis, facilisis tellus.
+        </p>
+        <p>
+            Sed imperdiet est quis metus dictum iaculis. Pellentesque sit amet felis aliquet, volutpat odio vitae, laoreet lorem.
+            Fusce auctor tempus iaculis. Sed sit amet metus nisi. Ut interdum accumsan turpis eu vulputate. Donec nec ultrices magna,
+            sed molestie orci. Pellentesque sed facilisis nisi. Praesent at velit ipsum. Cras a purus mollis, vestibulum turpis ut,
+            ultricies felis. Duis ac laoreet felis. Cras vehicula turpis dui, sed mattis urna fermentum sed. Vestibulum fringilla egestas nulla.
+            Praesent tristique iaculis lorem, quis sagittis est euismod sit amet.
+        </p>
+        {% if (app.user) %}
+            <p class="sub-title">We are glad to see you here, {{ app.user.username }}</p>
+            <div class="flex centered">
+                <button type="button" class="btn btn-primary">Explore news</button>
+            </div>
+        {% else %}
+            <p class="sub-title">It seems you didn't authorized to your account yet</p>
+            <div class="flex centered bottom-margined30">
+                <a href="{{ path('app_login') }}" target="_self"><button type="button" class="btn btn-outline-primary btn-group">Login</button></a>
+                <a href="{{ path('app_register') }}" target="_self"><button type="button" class="btn btn-outline-primary btn-group">Regsiter</button></a>
+            </div>
+            <a href="{{ path('main_page') }}" target="_self" class="text-center bottom-margined30">Go to main page without authorization</a>
+        {% endif %}
+    </div>
+{% endblock %}
