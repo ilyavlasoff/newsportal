@@ -1,0 +1,49 @@
+{% extends('base.html.twig') %}
+
+{% block title %}About NewsPortal{% endblock %}
+{% block stylesheets %}
+    {{ include('common.html.twig') }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/header.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/authpages.css') }}">
+{% endblock %}
+{% block body %}
+    {{ include('components/header.html.twig') }}
+    <div class="content-container">
+        <div>
+            <img src="{{ asset('media/images/referral-leader.jpg') }}" class="title-pic">
+            <h1 class="title">Become an author</h1>
+        </div>
+        <h4 class="sub-title">You'll can write your original articles, just create a request using a form below.
+            Provide some personal information and our moderators consider it as soon as possible</h4>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ornare dui sed dolor sagittis, sit amet viverra
+            ligula viverra. Duis volutpat tortor at fringilla gravida. Quisque in tellus et risus fringilla scelerisque.
+            Integer sem lorem, varius eget maximus id, vestibulum ac diam. Phasellus malesuada velit eu arcu tempus cursus.
+            Vestibulum eu odio quis nisl suscipit tempor. Phasellus tempor, quam non vulputate placerat, lorem nulla
+            posuere magna, quis eleifend tellus lectus sit amet nunc. In auctor in massa sed tristique.
+        </p>
+        <div class="flex centered regform-box">
+            <div class="flex-col">
+                <div class="form-group">
+                    <label for="inputName">{{ form_label(registrationForm.email, 'Name') }}</label>
+                    {{ form_widget(registrationForm.email,  {'attr': {'class': 'form-control', 'id': 'inputName'}}) }}
+                </div>
+                <div class="form-group">
+                    <label for="inputSurname">{{ form_label(registrationForm.email, 'Surname') }}</label>
+                    {{ form_widget(registrationForm.email,  {'attr': {'class': 'form-control', 'id': 'inputSurname'}}) }}
+                </div>
+                <div class="form-group">
+                    <label for="inputPhone">{{ form_label(registrationForm.email, 'Phone') }}</label>
+                    {{ form_widget(registrationForm.email,  {'attr': {'class': 'form-control', 'id': 'inputPhone'}}) }}
+                </div>
+                <div class="form-group">
+                    <label for="inputEdu">{{ form_label(registrationForm.email, 'Education and competencies') }}</label>
+                    {{ form_widget(registrationForm.email,  {'attr': {'class': 'form-control', 'id': 'inputEdu'}}) }}
+                </div>
+            </div>
+            <div class="flex-col">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

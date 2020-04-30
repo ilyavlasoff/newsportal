@@ -1,0 +1,17 @@
+{% extends('base.html.twig') %}
+
+{% block title %}About NewsPortal{% endblock %}
+{% block stylesheets %}
+    {{ include('common.html.twig') }}
+{% endblock %}
+{% block body %}
+    <h1>Congratulations! You've registered successfully</h1>
+    <p>Hello {{ user.username }}. If you received this letter, it means that you successfully registered with the service</p>
+    <p>There is one nuance remains - you should confirm your account. I's simple - just click on the link below.</p>
+    <form method="post" action="{{ url('account_confirm') }}">
+        <input type="hidden" name="code" value="{{ code }}">
+        <input type="hidden" name="username" value="{{ user.username }}">
+        <button type="submit" class="btn btn-primary btn-lg">Confirm</button>
+    </form>
+    <p>We wish you pleasant emotions while using our service.<br>Your,<br>NewsPortal team</p>
+{% endblock %}

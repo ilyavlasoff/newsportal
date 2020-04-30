@@ -19,16 +19,17 @@ class Mailer
         $this->mailer = $mailer;
     }
 
-    public function sendConfirmation(User $user)
+    public function sendConfirmation(User $user, String $code)
     {
         $email = new TemplatedEmail();
         $email
-            ->from('noreply@newsportal.com')
+            ->from('tatiyanabelkina@mail.ru')
             ->to($user->getEmail())
             ->subject('Registration confirmation')
-            ->htmlTemplate('registration/confirm.html.twig')
+            ->htmlTemplate('pages/confirm.html.twig')
             ->context([
-                'user' => $user
+                'user' => $user,
+                'code' => $code
             ]);
         $this->mailer->send($email);
     }

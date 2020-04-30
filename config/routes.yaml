@@ -23,4 +23,7 @@ feed_page:
     controller: App\Controller\StartpageController::display
 account_confirm:
     path: /confirm
-    controller: App\Controller\ConfirmationController::display
+    controller: App\Controller\ConfirmationController::create
+author_request:
+    path: /beauthor
+    controller: App\Controller\AuthorRequestController::create

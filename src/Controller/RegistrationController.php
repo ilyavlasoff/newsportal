@@ -39,7 +39,8 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $mailer->sendConfirmation($user);
+
+            $mailer->sendConfirmation($user, random_bytes(64));
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
