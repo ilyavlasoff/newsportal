@@ -1,0 +1,13 @@
+{% extends('base.html.twig') %}
+
+{% block stylesheets %}
+    {{ include('common.html.twig') }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/header.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ include('components/header.html.twig') }}
+    <div class="content-container">
+        <h1 class="title text-center">News will be displayed here</h1>
+    </div>
+{% endblock %}

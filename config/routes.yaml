@@ -18,6 +18,9 @@ about_page:
         maxAge:    86400
         sharedAge: 86400
         private: true
-main_page:
+feed_page:
     path: /
     controller: App\Controller\StartpageController::display
+account_confirm:
+    path: /confirm
+    controller: App\Controller\ConfirmationController::display

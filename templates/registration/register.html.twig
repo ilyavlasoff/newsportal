@@ -6,27 +6,56 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/header.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/authpages.css') }}">
 {% endblock %}
-{% block body %}
 
+{% block body %}
     {{ include('components/header.html.twig') }}
     <div class="flex-col centered top-margined">
         <img src="{{ asset('media/images/person-sitting.png') }}" alt="Register image" class="title-pic-sm">
         <h1 class="title text-center">Registration</h1>
     </div>
 
-
         <div class="flex centered">
-            <div class="flex-col centered regform-box">
+            <div class="flex-col centered regform-box bottom-margined30">
                 {{ form_start(registrationForm) }}
-                    {{ form_row(registrationForm.username) }}
-                    {{ form_row(registrationForm.email) }}
-                    {{ form_row(registrationForm.plainPassword) }}
-                    {{ form_row(registrationForm.agreeTerms) }}
-                    {{ form_row(registrationForm.description) }}
-                    {{ form_row(registrationForm.userPic) }}
-                <button class="btn">Register</button>
+                {% if form_errors(registrationForm) %}
+                    <div class="alert alert-danger">{{ form_errors(registrationForm) }}</div>
+                {% endif %}
+
+                <div class="flex-col">
+                    <div class="form-group">
+                        <label for="inputUsername">{{ form_label(registrationForm.username, 'Username') }}</label>
+                        {{ form_widget(registrationForm.username, {'attr': {'class': 'form-control', 'id': 'inputUsername'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">{{ form_label(registrationForm.email, 'E-mail') }}</label>
+                        {{ form_widget(registrationForm.email,  {'attr': {'class': 'form-control', 'id': 'inputEmail'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword">{{ form_label(registrationForm.plainPassword.first, 'Password') }}</label>
+                        {{ form_widget(registrationForm.plainPassword.first,  {'attr': {'class': 'form-control', 'id': 'inputPassword'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="repeatPassword">{{ form_label(registrationForm.plainPassword.second, 'Repeat password') }}</label>
+                        {{ form_widget(registrationForm.plainPassword.second,  {'attr': {'class': 'form-control', 'id': 'repeatPassword'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="descriptionField">{{ form_label(registrationForm.plainPassword, 'Description') }}</label>
+                        {{ form_widget(registrationForm.description, {'attr': {'class': 'form-control', 'id': 'descriptionField'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="fileInput">Set profile picture</label>
+                        {{ form_widget(registrationForm.userPic, {'attr': {'class': 'form-control-file', 'id': 'fileInput'}}) }}
+                    </div>
+                    <div class="form-group form-check">
+                        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-input', 'id': 'agreeCheck'}}) }}
+                        <label class="form-check-label" for="agreeCheck">Confirm <a href="{{ path('feed_page') }}" target="_blank">terms of usage</a></label>
+                    </div>
+                    <button class="btn btn-primary btn-lg bottom-margined30">Register</button>
+                </div>
+
                 {{ form_end(registrationForm) }}
                 <a href="{{ path('app_login') }}" target="_self">Already registered?</a>
             </div>
+
         </div>
 {% endblock %}

@@ -8,21 +8,26 @@ use App\Security\UserAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use App\Service\Mailer;
 
 class RegistrationController extends AbstractController
 {
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder,
+    public function register(Mailer $mailer, Request $request, UserPasswordEncoderInterface $passwordEncoder,
                              GuardAuthenticatorHandler $guardHandler, UserAuthenticator $authenticator): Response
     {
+        if ($this->getUser())
+        {
+            $this->redirectToRoute('feed_page');
+        }
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
@@ -34,7 +39,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // do anything else you need here, like send an email
+            $mailer->sendConfirmation($user);
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
@@ -45,7 +50,8 @@ class RegistrationController extends AbstractController
         }
 
         return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
+            'registrationForm' => $form->createView()
         ]);
     }
+
 }

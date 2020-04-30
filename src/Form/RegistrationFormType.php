@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -39,11 +40,12 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'You should agree to our terms',
                     ]),
                 ],
             ])
-            ->add('plainPassword', PasswordType::class, [
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
                 'mapped' => false,
                 'constraints' => [
                     new NotBlank([
@@ -59,14 +61,7 @@ class RegistrationFormType extends AbstractType
             ->add('description', TextareaType::class, [
                 'required' => false
             ])
-            ->add('userPic', FileType::class, [
-                'required' => false,
-                'constraints' => [
-                    'maxSize'=> '1024k',
-                    'mimeTypes'=> ['image/jpeg', 'image/png'],
-                    'mimeTypesMessage'=> 'Please upload {{ types }} file'
-                ]
-            ])
+            ->add('userPic', FileType::class)
         ;
     }
 
