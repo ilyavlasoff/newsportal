@@ -54,6 +54,12 @@ class User implements UserInterface
      */
     private $userPic;
 
+    /**
+     * @return boolean
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $isActivated;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -159,6 +165,18 @@ class User implements UserInterface
     public function setUserPic(?string $userPic): self
     {
         $this->userPic = $userPic;
+
+        return $this;
+    }
+
+    public function getIsActivated(): ?bool
+    {
+        return $this->isActivated;
+    }
+
+    public function setIsActivated(bool $isActivated): self
+    {
+        $this->isActivated = $isActivated;
 
         return $this;
     }

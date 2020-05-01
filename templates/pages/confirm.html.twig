@@ -10,7 +10,7 @@
     <p>There is one nuance remains - you should confirm your account. I's simple - just click on the link below.</p>
     <form method="post" action="{{ url('account_confirm') }}">
         <input type="hidden" name="code" value="{{ code }}">
-        <input type="hidden" name="username" value="{{ user.username }}">
+        <input type="hidden" name="user" value="{{ user.id }}">
         <button type="submit" class="btn btn-primary btn-lg">Confirm</button>
     </form>
     <p>We wish you pleasant emotions while using our service.<br>Your,<br>NewsPortal team</p>

@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Confirmation;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
+use App\Service\RandomCodeGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,12 +37,18 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $user->setRoles(['ROLE_USER']);
+            $user->setIsActivated(false);
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
+
+            $confirmationCode = (new RandomCodeGenerator)->GetRandomCode(64);
+            $confirmation = new Confirmation($user, $confirmationCode, 1, 1, 1);
+            $entityManager->persist($confirmation);
             $entityManager->flush();
 
-
-            $mailer->sendConfirmation($user, random_bytes(64));
+            $mailer->sendConfirmation($user, $confirmationCode);
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
