@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in{% endblock %}
+{% block stylesheets %}
+    {{ include('common.html.twig') }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/header.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/authpages.css') }}">
+{% endblock %}
+{% block body %}
+    {{ include('components/header.html.twig') }}
+
+    <div class="flex-col centered top-margined">
+        <img src="{{ asset('media/images/customize.png') }}" alt="Register image" class="title-pic-sm">
+        <h1 class="title text-center">Congratulations!</h1>
+    </div>
+
+    <div class="flex-col centered content-container">
+        <h4 class="sub-title">Confirmation mail was sent to your e-mail. <br>
+            Please, <a href="mailto:{{ user.email }}">confirm your account</a> now to use all features. <br>
+            Now you can customize your profile by adding bio and profile avatar
+        </h4>
+        <div class="flex-col centered regform-box bottom-margined30">
+            {% set formErrors = customizationForm.vars.errors.form.getErrors(true) %}
+            {% if formErrors|length %}
+                <div class="alert alert-danger">
+                    <label>Can not execute due to these errors:</label>
+                    <ul>
+                        {% for error in formErrors %}
+                            <li>{{ error.message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            {{ form_start(customizationForm) }}
+                <div class="flex-col">
+                    <div class="form-group">
+                        <label for="inputDescription">{{ form_label(customizationForm.description, 'Profile description') }}</label>
+                        {{ form_widget(customizationForm.description,  {'attr': {'class': 'form-control', 'id': 'inputPassword'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputUserPic">{{ form_label(customizationForm.userPic, 'Profile picture') }}</label>
+                        {{ form_widget(customizationForm.userPic,  {'attr': {'class': 'form-control-file', 'id': 'inputUserPic'}}) }}
+                    </div>
+                    <button class="btn btn-primary btn-lg top-margined bottom-margined30">Continue</button>
+                </div>
+            {{ form_end(customizationForm) }}
+
+            <a href="{{ path('feed_page') }}" target="_self">No, thanks</a>
+
+        </div>
+    </div>
+
+{% endblock %}

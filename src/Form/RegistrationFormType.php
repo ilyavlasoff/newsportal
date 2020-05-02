@@ -58,10 +58,6 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('description', TextareaType::class, [
-                'required' => false
-            ])
-            ->add('userPic', FileType::class)
         ;
     }
 

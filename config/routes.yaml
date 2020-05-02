@@ -7,9 +7,6 @@ app_login:
 app_logout:
     path: /logout
     controller: App\Controller\SecurityController::logout
-owner_page:
-    path: /my
-    controller: App\Controller\UserpageController::display
 about_page:
     path: /about
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
@@ -18,12 +15,18 @@ about_page:
         maxAge:    86400
         sharedAge: 86400
         private: true
-feed_page:
-    path: /
-    controller: App\Controller\StartpageController::display
 account_confirm:
     path: /confirm
     controller: App\Controller\ConfirmationController::create
+user_page:
+    path: /user/{id}
+    controller: App\Controller\UserpageController::display
 author_request:
     path: /beauthor
     controller: App\Controller\AuthorRequestController::create
+customize_page:
+    path: /customize
+    controller: App\Controller\FirstCustomizationController::customize
+feed_page:
+    path: /
+    controller: App\Controller\StartpageController::display

@@ -8,6 +8,7 @@ use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
 use App\Service\RandomCodeGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -48,8 +49,9 @@ class RegistrationController extends AbstractController
             $entityManager->persist($confirmation);
             $entityManager->flush();
 
-            $mailer->sendConfirmation($user, $confirmationCode);
+            //$mailer->sendConfirmation($user, $confirmationCode);
 
+            $request->request->add(['reg' => true]);
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
                 $request,

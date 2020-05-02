@@ -1,9 +1,14 @@
+{% if app.user and not app.user.isActivated %}
+    <div style="background-color: #e53935;">
+        <p class="text-center" style="margin: 0; color: #FFFFFF">Your account wasn't activated via e-mail. Fix problem</p>
+    </div>
+{% endif %}
 <div class="header">
     <div class="header-content">
         <a href="{{ path('feed_page') }}"><img src="media/images/main_logo.png" alt="logo"></a>
         {% if app.user %}
             <div class="pin-right">
-                <a href="{{ path('owner_page') }}" target="_self"><button type="button" class="btn btn-primary hbtn">{{ app.user.username }}</button></a>
+                <a href="{{ path('user_page', {id: app.user.id}) }}" target="_self"><button type="button" class="btn btn-primary hbtn">{{ app.user.username }}</button></a>
                 <a href="{{ path('app_logout') }}" target="_self"><button type="button" class="btn btn-outline-primary hbtn">Sign out</button></a>
             </div>
         {% else %}
