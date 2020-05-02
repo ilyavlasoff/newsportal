@@ -13,6 +13,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    const roleUser = 'ROLE_USER';
+    const roleNewsmakrt = 'ROLE_NEWSMAKER';
+    const roleAdmin = 'ROLE_ADMIN';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -89,7 +93,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = self::roleUser;
 
         return array_unique($roles);
     }

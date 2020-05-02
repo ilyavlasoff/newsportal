@@ -38,7 +38,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            $user->setRoles(['ROLE_USER']);
+            $user->setRoles([User::roleUser]);
             $user->setIsActivated(false);
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -49,7 +49,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($confirmation);
             $entityManager->flush();
 
-            //$mailer->sendConfirmation($user, $confirmationCode);
+            $mailer->sendConfirmation($user, $confirmationCode);
 
             $request->request->add(['reg' => true]);
             return $guardHandler->authenticateUserAndHandleSuccess(
