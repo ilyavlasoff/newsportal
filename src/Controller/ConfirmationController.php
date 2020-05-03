@@ -8,11 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ConfirmationController extends AbstractController
 {
-    public function create(Request $request)
+    public function create(Request $request, $user, $code)
     {
-        $user = $request->request->get('user');
-        $code = $request->request->get('code');
-
         $manager = $this->getDoctrine()->getManager();
         $actualConfirms = $manager->getRepository(Confirmation::class)->findOneBy(['forUser' => $user, 'key' => $code]);
         if (!$actualConfirms)

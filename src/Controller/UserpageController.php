@@ -18,7 +18,7 @@ class UserpageController extends AbstractController
         {
             throw new NotFoundHttpException();
         }
-        return $this->render('user_page.html.twig', [
+        return $this->render('/pages/user_page.html.twig', [
             'user' => $user
         ]);
     }

@@ -4,13 +4,15 @@
 {% block stylesheets %}
     {{ include('common.html.twig') }}
     <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/header.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/authpages.css') }}">
 {% endblock %}
+
 {% block body %}
     {{ include('components/header.html.twig') }}
 
     <div class="flex-col centered top-margined">
-        <img src="{{ asset('media/images/person-sitting.png') }}" alt="Register image" class="title-pic-sm">
+        <div class="title-pic-sm">
+            <img src="{{ asset('media/images/person-sitting.png') }}" class="pic-cover" alt="Register image">
+        </div>
         <h1 class="title text-center">Sign in</h1>
     </div>
 
@@ -44,5 +46,4 @@
 
         </div>
     </div>
-
 {% endblock %}

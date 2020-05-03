@@ -16,7 +16,7 @@ about_page:
         sharedAge: 86400
         private: true
 account_confirm:
-    path: /confirm
+    path: /confirm/{user}/{code}
     controller: App\Controller\ConfirmationController::create
 user_page:
     path: /user/{id}

@@ -9,13 +9,21 @@
     {{ include('components/header.html.twig') }}
     <div class="flex-col centered top-margined">
         {% if(success) %}
-            <img src="{{ asset('media/images/successful_person.png') }}" alt="Successful confirmation" class="title-pic-sm">
+            <div class="title-pic-sm">
+                <img src="{{ asset('media/images/review-icon.png') }}" class="pic-cover" alt="Register image">
+            </div>
             <h1 class="title text-center">Profile data confirmed</h1>
             <h4 class="sub-title">Now you can use your account without restrictions</h4>
-            <div class="flex centered bottom-margined30">
-                <a href="{{ path('app_login') }}" target="_self"><button type="button" class="btn btn-outline-primary btn-group">Login</button></a>
-                <a href="{{ path('app_register') }}" target="_self"><button type="button" class="btn btn-outline-primary btn-group">Regsiter</button></a>
-            </div>
+            {%  if (app.user) %}
+                <div class="flex centered bottom-margined30">
+                    <a href="{{ path('feed_page') }}" target="_self"><button type="button" class="btn btn-outline-primary btn-group">Explore news</button></a>
+                </div>
+            {% else %}
+                <div class="flex centered bottom-margined30">
+                    <a href="{{ path('app_login') }}" target="_self"><button type="button" class="btn btn-outline-primary btn-group">Login</button></a>
+                    <a href="{{ path('app_register') }}" target="_self"><button type="button" class="btn btn-outline-primary btn-group">Regsiter</button></a>
+                </div>
+            {% endif %}
         {% else %}
             <img src="{{ asset('media/images/error.png') }}" alt="Bad confirmation" class="title-pic-sm">
             <h1 class="title text-center">Can't confirm your account</h1>

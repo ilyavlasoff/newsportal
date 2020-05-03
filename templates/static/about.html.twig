@@ -9,10 +9,12 @@
     {{ include('components/header.html.twig') }}
     <div class="content-container">
         <div>
-            <img src="{{ asset('media/images/referral-leader.jpg') }}" class="title-pic">
-            <h1 class="title">About NewsPortal</h1>
+            <div class="title-pic">
+                <img src="{{ asset('media/images/referral-leader.jpg') }}" class="pic-cover" alt="Register image">
+            </div>
+            <h1 class="title">About News portal</h1>
         </div>
-        <h4 class="sub-title">NewsPortal - the world's leading news generation platform with open community,
+        <h4 class="sub-title">NewsPortal is a news generation platform with open community,
             advanced discussion opportunities and complete lack of state censorship. </h4>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ornare dui sed dolor sagittis, sit amet viverra
@@ -67,4 +69,5 @@
             <a href="{{ path('feed_page') }}" target="_self" class="text-center bottom-margined30">Go to main page without authorization</a>
         {% endif %}
     </div>
+    {{ include('components/footer.html.twig') }}
 {% endblock %}

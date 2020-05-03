@@ -30,7 +30,7 @@ class AppFixtures extends Fixture
         $admin->setEmail('testadmin@test.com');
         $admin->setDescription('123');
         $admin->setIsActivated(true);
-        $admin->setUserPic('default_pic');
+        $admin->setUserPic('default_pic.jpg');
         $manager->persist($admin);
         // add user
         $user = new User();
@@ -43,9 +43,9 @@ class AppFixtures extends Fixture
         );
         $user->setRoles([User::roleUser]);
         $user->setEmail('testuser@test.com');
-        $user->setDescription('123');
+        $user->setDescription('456');
         $user->setIsActivated(true);
-        $user->setUserPic('default_pic');
+        $user->setUserPic('default_pic.jpg');
         $manager->persist($user);
 
         $manager->flush();

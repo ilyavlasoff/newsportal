@@ -9,6 +9,7 @@ body {
 .centered {
     align-items: center;
     justify-content: center;
+    margin: auto;
 }
 
 .flex-col {
@@ -29,11 +30,17 @@ body {
 }
 .title-pic {
     width: 250px;
-    border-radius: 125px;
+    height: 250px;
 }
 .title-pic-sm {
     width: 150px;
-    border-radius: 75px;
+    height: 150px;
+}
+.pic-cover {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: 200px;
 }
 .sub-title {
     font-size: 22px;
@@ -62,4 +69,73 @@ p {
 }
 .pin-right {
     margin-left: auto;
+}
+
+.regform-box {
+    max-width: 60%;
+    margin-top: 60px;
+    border: 2px solid #a4a4a4;
+    border-radius: 10px;
+    padding: 40px;
+}
+
+.split {
+    width: 100%
+}
+.split + .split {
+    margin-left: 10px;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+@media screen and (max-width: 1100px) {
+    .regform-box {
+        max-width: 80%;
+        margin-top: 60px;
+        border: 2px solid #a4a4a4;
+        border-radius: 10px;
+        padding: 40px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .title {
+        font-size: 24px;
+    }
+    .title-pic {
+        height: 100px;
+        width: 100px;
+    }
+    .title-pic-sm {
+        height: 75px;
+        width: 75px;
+    }
+    p {
+        font-size: 14px;
+    }
+    .sub-title {
+        font-size: 16px;
+    }
+    .content-container {
+        width: 90%;
+        padding-top: 30px;
+    }
+    .top-margined {
+        margin-top: 20px;
+    }
+    .bottom-margined30 {
+        margin-bottom: 20px;
+    }
+    .regform-box {
+        max-width: 100%;
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #dcdcdc;
+    }
+    label {
+        font-size: 12px;
+    }
 }

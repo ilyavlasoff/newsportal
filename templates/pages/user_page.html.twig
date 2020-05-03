@@ -9,12 +9,14 @@
     {{ include('components/header.html.twig') }}
     <div class="content-container">
         <div>
-            <img src="{{ asset('media/images/referral-leader.jpg') }}" class="title-pic">
+            <div class="title-pic">
+                <img src="{{ asset('public/App/media/' ~ user.getUserPic()) }}" class="pic-cover" alt="Register image" id="previewImg">
+            </div>
             <h1 class="title">{{ user.username }}</h1>
         </div>
         <h4 class="sub-title">{{ user.getDescription() }}</h4>
         {% if(app.user.id == user.id) %}
-            <button type="button" class="btn btn-primary">Configure profile</button>
+            <div><button type="button" class="btn btn-primary">Configure profile</button></div>
         {% endif %}
     </div>
 {% endblock %}

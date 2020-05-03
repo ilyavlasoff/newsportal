@@ -4,13 +4,14 @@
 {% block stylesheets %}
     {{ include('common.html.twig') }}
     <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/header.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/authpages.css') }}">
 {% endblock %}
 {% block body %}
     {{ include('components/header.html.twig') }}
     <div class="content-container">
         <div>
-            <img src="{{ asset('media/images/referral-leader.jpg') }}" class="title-pic">
+            <div class="title-pic">
+                <img src="{{ asset('media/images/referral-leader.jpg') }}" class="pic-cover" alt="Register image">
+            </div>
             <h1 class="title">Become an author</h1>
         </div>
         <h4 class="sub-title">You'll can write your original articles, just create a request using a form below.
@@ -22,13 +23,80 @@
             Vestibulum eu odio quis nisl suscipit tempor. Phasellus tempor, quam non vulputate placerat, lorem nulla
             posuere magna, quis eleifend tellus lectus sit amet nunc. In auctor in massa sed tristique.
         </p>
-        <div class="flex centered regform-box">
-            <div class="flex-col">
+        <div class="flex centered regform-box bottom-margined30">
 
+            {{ form_start(requestForm, {'attr': {'class': 'flex-col'}}) }}
+            {% set formErrors = requestForm.vars.errors.form.getErrors(true) %}
+            {% if formErrors|length %}
+                <div class="alert alert-danger">
+                    <label>Can not register due to these errors:</label>
+                    <ul>
+                        {% for error in formErrors %}
+                            <li>{{ error.message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="flex-row">
+                <div class="flex-col split">
+                    <div class="form-group">
+                        <label for="inputName">{{ form_label(requestForm.name, 'Name') }}</label>
+                        {{ form_widget(requestForm.name, {'attr': {'class': 'form-control', 'id': 'inputName'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputSurname">{{ form_label(requestForm.surname, 'Surname') }}</label>
+                        {{ form_widget(requestForm.surname, {'attr': {'class': 'form-control', 'id': 'inputSurname'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputCountry">{{ form_label(requestForm.country, 'Country') }}</label>
+                        {{ form_widget(requestForm.country, {'attr': {'class': 'form-control', 'id': 'inputCountry'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputBday">{{ form_label(requestForm.birthday, 'Birthday') }}</label>
+                        {{ form_widget(requestForm.birthday, {'attr': {'id': 'inputBday'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputLang">{{ form_label(requestForm.language, 'Language') }}</label>
+                        {{ form_widget(requestForm.language, {'attr': {'class': 'form-control', 'id': 'inputLang'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">{{ form_label(requestForm.email, 'E-mail') }}</label>
+                        {{ form_widget(requestForm.email, {'attr': {'class': 'form-control', 'id': 'inputEmail'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPhone">{{ form_label(requestForm.phone, 'Phone') }}</label>
+                        {{ form_widget(requestForm.phone, {'attr': {'class': 'form-control', 'id': 'inputPhone'}}) }}
+                    </div>
+                </div>
+                <div class="flex-col split">
+                    <div class="form-group">
+                        <label for="inputEdu">{{ form_label(requestForm.edu, 'Education') }}</label>
+                        {{ form_widget(requestForm.edu, {'attr': {'class': 'form-control', 'id': 'inputEdu'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputCategories">{{ form_label(requestForm.categories, 'Categories') }}</label>
+                        {{ form_widget(requestForm.categories, {'attr': {'class': 'form-control', 'id': 'inputCategories'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputBio">{{ form_label(requestForm.bio, 'Bio') }}</label>
+                        {{ form_widget(requestForm.bio, {'attr': {'class': 'form-control', 'id': 'inputBio'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPreviousWorks">{{ form_label(requestForm.previousWorks, 'Previous works') }}</label>
+                        {{ form_widget(requestForm.previousWorks, {'attr': {'class': 'form-control', 'id': 'inputPreviousWorks'}}) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputOther">{{ form_label(requestForm.other, 'Other') }}</label>
+                        {{ form_widget(requestForm.other, {'attr': {'class': 'form-control', 'id': 'inputOther'}}) }}
+                    </div>
+                </div>
             </div>
-            <div class="flex-col">
-
+            <div class="flex centered">
+                <button class="btn btn-primary btn-lg">Add request</button>
             </div>
+            {{ form_end(requestForm) }}
         </div>
+
     </div>
+    {{ include('components/footer.html.twig') }}
 {% endblock %}

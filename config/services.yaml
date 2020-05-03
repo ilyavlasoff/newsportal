@@ -6,7 +6,7 @@
 parameters:
     user_media_path: 'App/media/'
     default_media_path: 'public/App/media/'
-
+    default_userpic: 'default/user.jpg'
 
 services:
     # default configuration for services in *this* file

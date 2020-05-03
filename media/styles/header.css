@@ -13,3 +13,46 @@
 .hbtn {
     margin-left: 10px;
 }
+
+.header-min {
+    background-color: #242424;
+    width: 100%;
+    height: 50px;
+    display: none;
+}
+.header-content {
+    width: 80%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
+.fas {
+    margin-left: 10px;
+}
+.footer {
+    background-color: #a4a4a4;
+    width: 100%;
+    height: 70px;
+    padding: 5px;
+}
+.footer-text {
+    color: #FFFFFF;
+    font-size: 14px;
+    margin: auto;
+    text-align: center;
+}
+.logo-pic {
+    height: 50px;
+}
+.logo-pic-min {
+    height: 30px;
+}
+@media screen and (max-width: 600px) {
+    .header {
+        display: none;
+    }
+    .header-min {
+        display: block;
+    }
+}

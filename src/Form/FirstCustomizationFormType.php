@@ -32,7 +32,7 @@ class FirstCustomizationFormType extends AbstractType
                     new File([
                         'maxSize' => '1024k',
                         'maxSizeMessage' => "File is too big. Allowed maximum {{ limit }} ",
-                        'mimeTypes' => ['image/jpg', 'image/png'],
+                        'mimeTypes' => ['image/jpg', 'image/png', 'image/jpeg'],
                         'mimeTypesMessage' => "File {{ name }} has type {{ type }}. Allowed types: {{ types }}"
                     ])
                 ]

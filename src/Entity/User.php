@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Table(name="usr")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
+ * @UniqueEntity(fields={"username", "email"}, message="There is already an account with this username or email")
  */
 class User implements UserInterface
 {
@@ -42,7 +42,8 @@ class User implements UserInterface
 
     /**
      * @var string User email
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(type="string", nullable=false, unique=true)
+     *
      */
     private $email;
 

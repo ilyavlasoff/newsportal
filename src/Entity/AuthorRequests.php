@@ -3,10 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AuthorRequestsRepository")
  * @ORM\Table(name="author_requests")
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     message="You have already registered request!"
+ * )
  */
 class AuthorRequests
 {
@@ -43,7 +48,7 @@ class AuthorRequests
     private $language;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=false, unique=true)
      */
     private $email;
 

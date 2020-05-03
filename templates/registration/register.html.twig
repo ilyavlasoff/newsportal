@@ -4,13 +4,14 @@
 {% block stylesheets %}
     {{ include('common.html.twig') }}
     <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/header.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/authpages.css') }}">
 {% endblock %}
 
 {% block body %}
     {{ include('components/header.html.twig') }}
     <div class="flex-col centered top-margined">
-        <img src="{{ asset('media/images/person_with_notebook.jpg') }}" alt="Register image" class="title-pic-sm">
+        <div class="title-pic-sm">
+            <img src="{{ asset('media/images/person_with_notebook.jpg') }}" class="pic-cover" alt="Register image">
+        </div>
         <h1 class="title text-center">Registration</h1>
     </div>
 
@@ -56,6 +57,5 @@
                 <a href="{{ path('app_login') }}" target="_self">Already registered?</a>
                 <a href="{{ path('author_request') }}" target="_self">Want to be an author?</a>
             </div>
-
         </div>
 {% endblock %}

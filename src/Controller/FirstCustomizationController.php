@@ -29,14 +29,10 @@ class FirstCustomizationController extends AbstractController
                 $originalFilename = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($originalFilename);
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$pictureFile->guessExtension();
-                try {
-                    $pictureFile->move(
-                        $this->getParameter('user_media_path'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
+                $pictureFile->move(
+                    $this->getParameter('user_media_path'),
+                    $newFilename
+                );
                 $user->setUserPic($newFilename);
             }
             $manager->flush();

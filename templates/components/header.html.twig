@@ -5,7 +5,7 @@
 {% endif %}
 <div class="header">
     <div class="header-content">
-        <a href="{{ path('feed_page') }}"><img src="media/images/main_logo.png" alt="logo"></a>
+        <a href="{{ path('feed_page') }}"><img src="{{ asset('media/images/logo.png') }}" alt="logo" class="logo-pic"></a>
         {% if app.user %}
             <div class="pin-right">
                 <a href="{{ path('user_page', {id: app.user.id}) }}" target="_self"><button type="button" class="btn btn-primary hbtn">{{ app.user.username }}</button></a>
@@ -15,6 +15,22 @@
             <div class="pin-right">
                 <a href="{{ path('app_register') }}" target="_self"><button type="button" class="btn btn-primary hbtn">Register</button></a>
                 <a href="{{ path('app_login') }}" target="_self"><button type="button" class="btn btn-outline-primary hbtn">Sign in</button></a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<div class="header-min">
+    <div class="header-content">
+        <a href="{{ path('feed_page') }}"><img src="{{ asset('media/images/logo_min.png') }}" alt="logo" class="logo-pic-min"></a>
+        {% if app.user %}
+            <div class="pin-right">
+                <a href="{{ path('user_page', {id: app.user.id}) }}" target="_self"><i class="fas fa-user"></i></a>
+                <a href="{{ path('app_logout') }}" target="_self"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        {% else %}
+            <div class="pin-right">
+                <a href="{{ path('app_register') }}" target="_self"><i class="fas fa-user-plus"></i></a>
+                <a href="{{ path('app_login') }}" target="_self"><i class="fas fa-sign-in-alt"></i></a>
             </div>
         {% endif %}
     </div>

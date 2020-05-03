@@ -39,6 +39,7 @@ class RegistrationController extends AbstractController
             );
 
             $user->setRoles([User::roleUser]);
+            $user->setUserPic($this->getParameter('default_userpic'));
             $user->setIsActivated(false);
 
             $entityManager = $this->getDoctrine()->getManager();
