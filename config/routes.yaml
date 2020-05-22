@@ -27,6 +27,12 @@ author_request:
 customize_page:
     path: /customize
     controller: App\Controller\FirstCustomizationController::customize
+add_article_page:
+    path: /article/add
+    controller: App\Controller\AddArticleController::displayPage
+article_page:
+    path: /article/{id}
+    controller: App\Controller\FullPageArticleController::displayPage
 feed_page:
     path: /
     controller: App\Controller\StartpageController::display

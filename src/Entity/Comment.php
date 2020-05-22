@@ -13,7 +13,7 @@ class Comment
     /**
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue()
      */
     private $id;
 

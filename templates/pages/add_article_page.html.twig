@@ -1,0 +1,35 @@
+{% extends('base.html.twig') %}
+
+{% block stylesheets %}
+    {{ include('common.html.twig') }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/header.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ include('components/header.html.twig') }}
+    <div class="flex-col centered top-margined">
+        <div class="title-pic-sm">
+            <img src="{{ asset('media/images/person_with_notebook.jpg') }}" class="pic-cover" alt="Register image">
+        </div>
+        <h1 class="title text-center">Add an article</h1>
+    </div>
+    <div class="content-container">
+        <div>
+            {{ form_start(addArticleForm) }}
+            <div class="form-group">
+                <label for="formAddTitle">{{ form_label(addArticleForm.title) }}</label>
+                {{ form_widget(addArticleForm.title, {'attr': {'class': 'form-control', 'id': 'formAddTitle'}}) }}
+            </div>
+            <div class="form-group">
+                <label for="formAddDescription">{{ form_label(addArticleForm.description) }}</label>
+                {{ form_widget(addArticleForm.description, {'attr': {'class': 'form-control', 'id': 'formAddDescription', 'rows': '8'}}) }}
+            </div>
+            <div class="form-group">
+                <label for="formAddContent">{{ form_label(addArticleForm.content) }}</label>
+                {{ form_widget(addArticleForm.content, {'attr': {'class': 'form-control', 'id': 'formAddContent', 'rows': '20'}}) }}
+            </div>
+            {{ form_row(addArticleForm.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+            {{ form_end(addArticleForm) }}
+        </div>
+    </div>
+{% endblock %}
