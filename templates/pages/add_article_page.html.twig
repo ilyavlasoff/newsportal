@@ -11,7 +11,11 @@
         <div class="title-pic-sm">
             <img src="{{ asset('media/images/person_with_notebook.jpg') }}" class="pic-cover" alt="Register image">
         </div>
-        <h1 class="title text-center">Add an article</h1>
+        <h1 class="title text-center">{{ title }}</h1>
+        {% if edited %}
+            <h5>Published at: {{ firstPublishtime | date('yy.m.d h:i') }}</h5>
+            <h5>Views: {{ viewsCount }}</h5>
+        {% endif %}
     </div>
     <div class="content-container">
         <div>

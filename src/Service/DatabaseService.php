@@ -50,6 +50,20 @@ class DatabaseService
         return $article;
     }
 
+    public function deleteArticle($id)
+    {
+        $article = $this->getArticle($id);
+        $this->em->remove($article);
+        $this->em->flush();
+    }
+
+    public function incrementVisitCounter(Article $article)
+    {
+        $visitCount = $article->getViewsCount();
+        $article->setViewsCount(++$visitCount);
+        $this->em->flush();
+    }
+
     public function getTagsToArticle(Article $article)
     {
 

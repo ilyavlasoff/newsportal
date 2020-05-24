@@ -29,7 +29,7 @@ customize_page:
     controller: App\Controller\FirstCustomizationController::customize
 add_article_page:
     path: /article/add
-    controller: App\Controller\AddArticleController::displayPage
+    controller: App\Controller\ArticleOperationsController::addArticle
 comment_list:
     path: /article/{id}/comments
     controller: App\Controller\CommentController::getCommentList
@@ -56,3 +56,11 @@ article_page:
 feed_page:
     path: /
     controller: App\Controller\StartpageController::display
+edit_article:
+    path: /article/{id}/edit
+    controller: App\Controller\ArticleOperationsController::editArticle
+delete_article:
+    path: /article/{id}/delete
+    controller: App\Controller\ArticleOperationsController::deleteArticle
+    methods:
+        - POST

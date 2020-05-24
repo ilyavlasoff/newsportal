@@ -28,7 +28,7 @@ class Comment
     /**
      * @ORM\ManyToOne(targetEntity="Article")
      * @ORM\JoinColumns({
-     *      @ORM\JoinColumn(name="to_article", referencedColumnName="id", nullable=false)
+     *      @ORM\JoinColumn(name="to_article", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * })
      */
     private $toArticle;

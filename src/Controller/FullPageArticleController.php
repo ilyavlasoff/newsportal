@@ -17,6 +17,12 @@ class FullPageArticleController extends AbstractController
     public function displayPage(string $id)
     {
         $article = $this->databaseOperator->getArticle($id);
+        $authorId = $article->getAuthorId();
+
+        if (!$this->getUser() || $this->getUser()->getId() !== $authorId->getId())
+        {
+            $this->databaseOperator->incrementVisitCounter($article);
+        }
 
         return $this->render('pages/article_full_view.html.twig', [
            'article' => $article
