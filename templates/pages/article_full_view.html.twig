@@ -1,0 +1,206 @@
+{% extends('base.html.twig') %}
+
+{% block stylesheets %}
+    {{ include('common.html.twig') }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('media/styles/header.css') }}">
+{% endblock %}
+
+{% block body %}
+    {{ include('components/header.html.twig') }}
+    <div class="content-container">
+        <div class="flex-col centered top-margined">
+            <div class="title-pic-sm">
+                <img src="{{ asset('media/images/person_with_notebook.jpg') }}" class="pic-cover" alt="Register image">
+            </div>
+            <h1 class="title text-center">{{ article.title }}</h1>
+            <label>
+                <span><i class="far fa-calendar"></i> {{ article.writingTime | date('Y-m-d H:i') }}</span>
+                <span><i class="fas fa-eye"></i> {{ article.viewsCount }}</span>
+                <!--span><i class="fas fa-user-tie"></i> {.{ article.username }}</span>
+                <span><i class="fas fa-user-tie"></i>{.{ article.author }}</span-->
+            </label>
+        </div>
+        <div>
+            <h6>{{ article.description }}</h6>
+        </div>
+        <div>
+            <p>{{ article.content }}</p>
+        </div>
+        <div class="flex centered">
+            <h4>Comments:</h4>
+        </div>
+        <div class="flex-row bottom-margined30 bottom-margined30">
+            <button id="addComment" class="btn btn-primary add-comment-btn">Add comment</button>
+        </div>
+        <div class="comment-box" id="addCommentBox">
+            <div class="input-group">
+                <textarea class="form-control commentInputArea"></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" id="submitComment">Send</button>
+        </div>
+        <div id="comment-container"></div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            getCommentsList();
+        });
+
+        $('#addComment').click(function () {
+            $('#addCommentBox').toggle('slow');
+        })
+
+        let loaded = 0;
+        let assetPath = '/www/public/App/media/default/';
+        function getCommentsList()
+        {
+            $('#comment-container').empty();
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('comment_list', {'id': article.id }) }}',
+                data: {
+                    'count' : 10,
+                    'offset' : loaded,
+                    'sort': '1'
+                },
+                success: function (rawData) {
+                    let data = JSON.parse(rawData);
+                    let count = data['count'];
+                    loaded += count;
+                    let content = data['comments'];
+                    for (let i in content)
+                    {
+                        let item = content[i];
+                        let comment = $('<div></div>', {'class': 'comment-box'});
+
+                        let buttonTopRow = $('<div>', {'class': 'buttons-top-row'})
+                        let editLink = $('<i></i>', {'class': 'editComment fas fa-edit', 'id': item.id});
+                        editLink.click(function () {
+                            editComment(comment, item.id);
+                        })
+                        editLink.appendTo(buttonTopRow);
+                        let deleteLink = $('<i></i>', {'class': 'deleteComment fas fa-times', 'id': item.id});
+                        deleteLink.click(function () {
+                            deleteComment(comment, item.id);
+                        })
+                        deleteLink.appendTo(buttonTopRow);
+                        buttonTopRow.appendTo(comment);
+
+                        let userPic = $('<div>', {'class': 'flex-col'}).append($('<img>', {'src': assetPath + item.userPic, 'class': ''}));
+
+                        let mainCol = $('<div>', {'class': 'flex-col'});
+                        let authorData = $('<p>', {'class': 'comment-metadata'});
+                        $('<span></span>', {'class': 'authorNickname'})
+                            .append('<i class="fas fa-user"></i> ')
+                            .append(item.username)
+                            .appendTo(authorData);
+                        $('<span></span>', {'class': 'addedTime'})
+                            .append('<i class="far fa-calendar"></i> ')
+                            .append(item.addedTime.date)
+                            .appendTo(authorData);
+                        authorData.appendTo(mainCol);
+
+                        $('<p></p>', {'class': 'commentText'}).append(item.content).appendTo(mainCol);
+
+                        $('<div>', {'class': 'flex-row'}).append(userPic).append(mainCol).appendTo(comment);
+                        $('#comment-container').append(comment);
+                    }
+                    $('.')
+                },
+                error: function (rawData) {
+                    $('#comment-container').append('Sorry:( Error occured when downloading content');
+                    console.log('Error occured');
+                },
+                dataType: 'json'
+            })
+        }
+
+        function deleteComment(element, id)
+        {
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('delete_comment') }}',
+                data: {
+                    'id': id
+                },
+                success: function (rawData) {
+                    let data = JSON.parse(rawData);
+                    if (data.deleted === true) {
+                        element.remove();
+                    }
+                },
+                error: function (rawData) {
+                    let data = JSON.parse(rawData);
+                    console.log(data.error)
+                },
+                dataType: 'json'
+            })
+        }
+
+        function editComment(element, id) {
+            let prevText = element.children('.commentText').text();
+
+            let form = $('<form></form>');
+            $('<textarea></textarea>', {'id': 'commentArea'}).val(prevText).appendTo(form);
+            let submitButton = $('<button></button>', {'type': 'button'}).append('Confirm').appendTo(form);
+            let cancelButton = $('<button></button>', {'type': 'button'}).append('Cancel').appendTo(form);
+            let container = $('<div></div>', {'class': 'commentEditContainer'}).append(form);
+
+            element.css('display', 'none');
+            container.insertAfter(element);
+
+            cancelButton.click(function () {
+                container.remove();
+                element.css('display', 'block');
+            });
+
+            submitButton.click(function () {
+                let text = $('#commentArea').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ path('edit_comment') }}',
+                    data: {
+                        'id': id,
+                        'content': text
+                    },
+                    success: function (rawData) {
+                        let data = JSON.parse(rawData);
+                        if (data.edited === true) {
+                            element.children('.commentText').text(text);
+                            element.children('.addedTime').text(Date.now().toString());
+                            element.css('display', 'block');
+                            container.remove();
+                        }
+                    },
+                    error: function (rawData) {
+                        let data = JSON.parse(rawData);
+                        console.log(data.error)
+                    },
+                    dataType: 'json'
+                })
+            });
+        }
+
+        $('#submitComment').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('add_comment', { 'id': article.id }) }}',
+                data: {
+                    'content': $('.commentInputArea').val()
+                },
+                success: function (rawData) {
+                    let data = JSON.parse(rawData);
+                    if (data.added === true) {
+                        getCommentsList();
+                    }
+                },
+                error: function (rawData) {
+                    let data = JSON.parse(rawData);
+                    console.log(data.error)
+                },
+                dataType: 'json'
+            })
+        })
+    </script>
+{% endblock %}

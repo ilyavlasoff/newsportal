@@ -21,7 +21,8 @@
         "symfony/twig-pack": "^1.0",
         "symfony/validator": "5.0.*",
         "symfony/yaml": "5.0.*",
-        "twig/twig": "^3.0"
+        "twig/twig": "^3.0",
+      "ext-json": "*"
     },
     "require-dev": {
     },

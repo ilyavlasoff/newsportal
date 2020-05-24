@@ -30,6 +30,26 @@ customize_page:
 add_article_page:
     path: /article/add
     controller: App\Controller\AddArticleController::displayPage
+comment_list:
+    path: /article/{id}/comments
+    controller: App\Controller\CommentController::getCommentList
+    methods:
+        - POST
+add_comment:
+    path: /article/{id}/add-comment
+    controller: App\Controller\CommentController::addComment
+    methods:
+        - POST
+edit_comment:
+    path: /comment/edit
+    controller: App\Controller\CommentController::editComment
+    methods:
+        - POST
+delete_comment:
+    path: /comment/delete
+    controller: App\Controller\CommentController::deleteComment
+    methods:
+        - POST
 article_page:
     path: /article/{id}
     controller: App\Controller\FullPageArticleController::displayPage

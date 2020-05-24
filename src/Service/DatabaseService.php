@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Entity\Article;
+use App\Entity\Comment;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
@@ -38,8 +40,69 @@ class DatabaseService
         return $query->getResult(Query::HYDRATE_ARRAY);
     }
 
+    public function getArticle($id)
+    {
+        $article = $this->em->getRepository(Article::class)->find($id);
+        if (! $article)
+        {
+            throw new \Exception('Article not found');
+        }
+        return $article;
+    }
+
     public function getTagsToArticle(Article $article)
     {
 
+    }
+
+    public function editComment($id, string $text)
+    {
+        $comment = $this->em->getRepository(Comment::class)->find($id);
+        if (! $comment)
+        {
+            throw new \Exception('Comment not found');
+        }
+        $comment->setContent($text);
+        $comment->setAddedTime(new \DateTime());
+        $this->em->flush();
+    }
+
+    public function deleteComment($id)
+    {
+        $comment = $this->em->getRepository(Comment::class)->find($id);
+        if (! $comment)
+        {
+            throw new \Exception('Comment not found');
+        }
+        $this->em->remove($comment);
+        $this->em->flush();
+    }
+
+    public function getComments(Article $article, int $count, int $offset): ?array
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder
+            ->select('c.id, c.addedTime, c.content, u.username, u.userPic')
+            ->from('App\Entity\Comment', 'c')
+            ->innerJoin('App\Entity\User', 'u', Join::WITH, 'c.writtenBy = u.id')
+            ->where('c.toArticle = :article')
+            ->setParameter('article', $article->getId())
+            ->setMaxResults($count)
+            ->setFirstResult($offset)
+            ->orderBy('c.addedTime');
+        $query = $queryBuilder->getQuery();
+        return $query->getResult(Query::HYDRATE_ARRAY);
+    }
+
+    public function addComment(string $content, Article $article, User $user): ?int
+    {
+        $comment = new Comment();
+        $comment->setAddedTime(new \DateTime());
+        $comment->setContent($content);
+        $comment->setToArticle($article);
+        $comment->setWrittenBy($user);
+        $this->em->persist($comment);
+        $this->em->flush();
+        return $comment->getId();
     }
 }

@@ -7,19 +7,25 @@
 
 {% block body %}
     {{ include('components/header.html.twig') }}
+
     <div class="content-container">
-        {% for article in articles %}
-            <div class="article-announce-container">
-                <h4 class="article-title">{{ article.title }}</h4>
-                <p>
-                    <span><i class="far fa-calendar"></i> {{ article.writingTime | date('Y-m-d H:i:s') }}</span>
-                    <span><i class="fas fa-eye"></i> {{ article.viewsCount }}</span>
-                    <span><i class="fas fa-user-tie"></i> {{ article.username }}</span>
-                </p>
-                <p>{{ article.description }}</p>
-                <a href="{{ path('article_page', {'id': article.id }) }}"><button class="btn btn-primary">Expland</button></a>
-                <a href="{{ path('article_page', {'id': article.id }) }}#comments"><i class="fas fa-comments fa-lg">{{ article.commentsCount }}</i></a>
-            </div>
-        {% endfor %}
+        <div class="flex-row head-tools-container">
+            <a href="{{ path('add_article_page') }}" class="addnew-button"><button class="btn btn-primary">Add a new article</button></a>
+        </div>
+        <div>
+            {% for article in articles %}
+                <div class="article-announce-container">
+                    <h4 class="article-title">{{ article.title }}</h4>
+                    <p>
+                        <span><i class="far fa-calendar"></i> {{ article.writingTime | date('Y-m-d H:i:s') }}</span>
+                        <span><i class="fas fa-eye"></i> {{ article.viewsCount }}</span>
+                        <span><i class="fas fa-user-tie"></i> {{ article.username }}</span>
+                    </p>
+                    <p>{{ article.description }}</p>
+                    <a href="{{ path('article_page', {'id': article.id }) }}"><button class="btn btn-primary">Expland</button></a>
+                    <a href="{{ path('article_page', {'id': article.id }) }}#comments"><i class="fas fa-comments fa-lg">{{ article.commentsCount }}</i></a>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
