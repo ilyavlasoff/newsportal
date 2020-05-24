@@ -69,6 +69,16 @@ class DatabaseService
 
     }
 
+    public function getTotalArticlesCount()
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+        $queryBuilder
+            ->select('COUNT(a.id) as count')
+            ->from('App\Entity\Article', 'a');
+        $query = $queryBuilder->getQuery();
+        return $query->getScalarResult();
+    }
+
     public function editComment($id, string $text)
     {
         $comment = $this->em->getRepository(Comment::class)->find($id);

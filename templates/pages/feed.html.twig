@@ -12,20 +12,87 @@
         <div class="flex-row head-tools-container">
             <a href="{{ path('add_article_page') }}" class="addnew-button"><button class="btn btn-primary">Add a new article</button></a>
         </div>
-        <div>
-            {% for article in articles %}
-                <div class="article-announce-container">
-                    <h4 class="article-title">{{ article.title }}</h4>
-                    <p>
-                        <span><i class="far fa-calendar"></i> {{ article.writingTime | date('Y-m-d H:i:s') }}</span>
-                        <span><i class="fas fa-eye"></i> {{ article.viewsCount }}</span>
-                        <span><i class="fas fa-user-tie"></i> {{ article.username }}</span>
-                    </p>
-                    <p>{{ article.description }}</p>
-                    <a href="{{ path('article_page', {'id': article.id }) }}"><button class="btn btn-primary">Expland</button></a>
-                    <a href="{{ path('article_page', {'id': article.id }) }}#comments"><i class="fas fa-comments fa-lg">{{ article.commentsCount }}</i></a>
-                </div>
-            {% endfor %}
+        <div id="announcesBox"></div>
+        <div class="flex-row">
+            <button class="prev-page btn btn-primary">Previous<i class="fas fa-arrow-left"></i></button>
+            <div id="pagesRow"></div>
+            <button class="next-page btn btn-primary">Next<i class="fas fa-arrow-right"></i></button>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            loadArticlesList(10);
+        });
+
+        let loadedItemsCount = 0;
+        let totalCount = 0;
+
+        function loadArticlesList(count) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ path('articles_list') }}',
+                data: {
+                    count: count,
+                    offset: loadedItemsCount
+                },
+                success: function (rawData) {
+                    let data = JSON.parse(rawData);
+                    totalCount = data.total;
+                    loadedItemsCount += data.loaded;
+                    for (i in data.content)
+                    {
+                        let item = data.content[i];
+                        let title = item.title;
+                        let writingTime = Date.parse(item.writingTime);
+                        let viewsCount = item.viewsCount;
+                        let username = item.username;
+                        let description = item.description;
+                        let articleId = item.id;
+                        let commentsCount = item.commentsCount;
+
+                        let container = $('<div>', {'class': 'article-announce-container'});
+                        $('<h4>', {'class': 'article-title'}).text(title).appendTo(container);
+                        $('<p>')
+                            .append($('<i>', {'class': 'fas fa-calendar'}))
+                            .append(writingTime.toString())
+                            .append($('<i>', {'class': 'fas fa-eye'}))
+                            .append(viewsCount)
+                            .append($('<i>', {'class': 'fas fa-user-tie'}))
+                            .append(username)
+                            .appendTo(container);
+                        $('<p>').text(description).appendTo(container);
+                        $('<a>', {'href': '/article/' + articleId})
+                            .append($('<button>', {'class': 'btn btn-primary'}).text('Discover'))
+                            .appendTo(container);
+                        $('<a>', {'href': '/article/' + articleId + '#comments'})
+                            .append($('<i>', {'class': 'fas fa-comments'}))
+                            .append($('<label>').text(commentsCount))
+                            .appendTo(container);
+                        $('#announcesBox').append(container);
+                    }
+
+                    let pagesCount = Math.ceil(totalCount/count);
+                    let currentPage = Math.floor(loadedItemsCount / count) + 1;
+
+                    if (pagesCount > 5)
+                    {
+                        let lower = Math.max(currentPage - 2, 1);
+                        let higner = Math.min(currentPage + 2, pagesCount);
+                        for(let i = lower; i <= higner; ++i)
+                        {
+                            $('#pagesRow').append($('<a>').text(i));
+                        }
+                    }
+                    else {
+                        for(let i = 0; i !== pagesCount; ++i)
+                        {
+                            $('#pagesRow').append($('<a>').text(i + 1));
+                        }
+                    }
+                }
+            })
+        }
+    </script>
 {% endblock %}

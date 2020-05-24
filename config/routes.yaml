@@ -50,12 +50,14 @@ delete_comment:
     controller: App\Controller\CommentController::deleteComment
     methods:
         - POST
+articles_list:
+    path: /articles/list
+    controller: App\Controller\ArticlesListController::getArticleList
+    methods:
+        - POST
 article_page:
     path: /article/{id}
     controller: App\Controller\FullPageArticleController::displayPage
-feed_page:
-    path: /
-    controller: App\Controller\StartpageController::display
 edit_article:
     path: /article/{id}/edit
     controller: App\Controller\ArticleOperationsController::editArticle
@@ -64,3 +66,6 @@ delete_article:
     controller: App\Controller\ArticleOperationsController::deleteArticle
     methods:
         - POST
+feed_page:
+    path: /
+    controller: App\Controller\ArticlesListController::displayPage
