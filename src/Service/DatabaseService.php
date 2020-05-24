@@ -82,14 +82,14 @@ class DatabaseService
     {
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder
-            ->select('c.id, c.addedTime, c.content, u.username, u.userPic')
+            ->select('c.id, c.addedTime, c.content, u.id as userId, u.username, u.userPic')
             ->from('App\Entity\Comment', 'c')
             ->innerJoin('App\Entity\User', 'u', Join::WITH, 'c.writtenBy = u.id')
             ->where('c.toArticle = :article')
             ->setParameter('article', $article->getId())
             ->setMaxResults($count)
             ->setFirstResult($offset)
-            ->orderBy('c.addedTime');
+            ->orderBy('c.addedTime', 'desc');
         $query = $queryBuilder->getQuery();
         return $query->getResult(Query::HYDRATE_ARRAY);
     }

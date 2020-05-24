@@ -99,6 +99,11 @@ p {
     width: 100%;
 }
 
+.description {
+    font-size: 20px;
+    text-indent: 20px;
+}
+
 .comment-box {
     background-color: #e4f2fe;
     display: flex;
@@ -115,6 +120,15 @@ p {
 
 .fas {
     color: #515151;
+}
+
+.btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.btn + .btn {
+    margin-left: 10px;
 }
 
 .add-comment-btn {

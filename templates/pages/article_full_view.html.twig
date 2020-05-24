@@ -7,6 +7,7 @@
 
 {% block body %}
     {{ include('components/header.html.twig') }}
+    <div hidden data-user-name="{{ app.user.id }}" id="auth"></div>
     <div class="content-container">
         <div class="flex-col centered top-margined">
             <div class="title-pic-sm">
@@ -21,7 +22,7 @@
             </label>
         </div>
         <div>
-            <h6>{{ article.description }}</h6>
+            <h6 class="description">{{ article.description }}</h6>
         </div>
         <div>
             <p>{{ article.content }}</p>
@@ -39,12 +40,13 @@
             <button type="button" class="btn btn-primary" id="submitComment">Send</button>
         </div>
         <div id="comment-container"></div>
+        <button type="button" id="loadMoreButton" class="btn btn-primary">Load more</button>
     </div>
 {% endblock %}
 {% block javascripts %}
     <script>
         $(document).ready(function () {
-            getCommentsList();
+            getCommentsList(10);
         });
 
         $('#addComment').click(function () {
@@ -53,14 +55,14 @@
 
         let loaded = 0;
         let assetPath = '/www/public/App/media/default/';
-        function getCommentsList()
+
+        function getCommentsList(loadChunkCount)
         {
-            $('#comment-container').empty();
             $.ajax({
                 type: 'POST',
                 url: '{{ path('comment_list', {'id': article.id }) }}',
                 data: {
-                    'count' : 10,
+                    'count' : loadChunkCount,
                     'offset' : loaded,
                     'sort': '1'
                 },
@@ -68,24 +70,44 @@
                     let data = JSON.parse(rawData);
                     let count = data['count'];
                     loaded += count;
+                    let commentContainer = $('#comment-container');
+
+                    if (count === 0)
+                    {
+                        commentContainer.empty();
+                        $('#loadMoreButton').css('display', 'none');
+                        $('<h4>').append('No comments yet').appendTo(commentContainer);
+                        return;
+                    }
+
+                    if (count < loadChunkCount)
+                    {
+                        $('#loadMoreButton').css('display', 'none');
+                    }
+
                     let content = data['comments'];
                     for (let i in content)
                     {
                         let item = content[i];
                         let comment = $('<div></div>', {'class': 'comment-box'});
 
-                        let buttonTopRow = $('<div>', {'class': 'buttons-top-row'})
-                        let editLink = $('<i></i>', {'class': 'editComment fas fa-edit', 'id': item.id});
-                        editLink.click(function () {
-                            editComment(comment, item.id);
-                        })
-                        editLink.appendTo(buttonTopRow);
-                        let deleteLink = $('<i></i>', {'class': 'deleteComment fas fa-times', 'id': item.id});
-                        deleteLink.click(function () {
-                            deleteComment(comment, item.id);
-                        })
-                        deleteLink.appendTo(buttonTopRow);
-                        buttonTopRow.appendTo(comment);
+                        let auth = $('#auth').attr('data-user-name');
+
+                        if (auth == item.userId)
+                        {
+                            let buttonTopRow = $('<div>', {'class': 'buttons-top-row'});
+                            let editLink = $('<i></i>', {'class': 'editComment fas fa-edit'});
+                            editLink.click(function () {
+                                editComment(comment, item.id);
+                            })
+                            editLink.appendTo(buttonTopRow);
+                            let deleteLink = $('<i></i>', {'class': 'deleteComment fas fa-times'});
+                            deleteLink.click(function () {
+                                deleteComment(comment, item.id);
+                            })
+                            deleteLink.appendTo(buttonTopRow);
+                            buttonTopRow.appendTo(comment);
+                        }
 
                         let userPic = $('<div>', {'class': 'flex-col'}).append($('<img>', {'src': assetPath + item.userPic, 'class': ''}));
 
@@ -104,9 +126,8 @@
                         $('<p></p>', {'class': 'commentText'}).append(item.content).appendTo(mainCol);
 
                         $('<div>', {'class': 'flex-row'}).append(userPic).append(mainCol).appendTo(comment);
-                        $('#comment-container').append(comment);
+                        commentContainer.append(comment);
                     }
-                    $('.')
                 },
                 error: function (rawData) {
                     $('#comment-container').append('Sorry:( Error occured when downloading content');
@@ -139,13 +160,13 @@
         }
 
         function editComment(element, id) {
-            let prevText = element.children('.commentText').text();
+            let prevText = element.find('.commentText').text();
 
             let form = $('<form></form>');
-            $('<textarea></textarea>', {'id': 'commentArea'}).val(prevText).appendTo(form);
-            let submitButton = $('<button></button>', {'type': 'button'}).append('Confirm').appendTo(form);
-            let cancelButton = $('<button></button>', {'type': 'button'}).append('Cancel').appendTo(form);
-            let container = $('<div></div>', {'class': 'commentEditContainer'}).append(form);
+            $('<textarea></textarea>', {'id': 'commentArea', 'class': 'form-control'}).val(prevText).appendTo(form);
+            let submitButton = $('<button></button>', {'type': 'button', 'class': 'btn btn-primary'}).append('Confirm').appendTo(form);
+            let cancelButton = $('<button></button>', {'type': 'button', 'class': 'btn btn-primary'}).append('Cancel').appendTo(form);
+            let container = $('<div></div>', {'class': 'comment-box input-group'}).append(form);
 
             element.css('display', 'none');
             container.insertAfter(element);
@@ -167,8 +188,8 @@
                     success: function (rawData) {
                         let data = JSON.parse(rawData);
                         if (data.edited === true) {
-                            element.children('.commentText').text(text);
-                            element.children('.addedTime').text(Date.now().toString());
+                            element.find('.commentText').text(text);
+                            element.find('.addedTime').text(Date.now().toString());
                             element.css('display', 'block');
                             container.remove();
                         }
@@ -192,7 +213,10 @@
                 success: function (rawData) {
                     let data = JSON.parse(rawData);
                     if (data.added === true) {
-                        getCommentsList();
+                        loaded = 0;
+                        $('#addCommentBox').hide();
+                        $('#comment-container').empty();
+                        getCommentsList(10);
                     }
                 },
                 error: function (rawData) {
@@ -201,6 +225,10 @@
                 },
                 dataType: 'json'
             })
-        })
+        });
+
+        $('#loadMoreButton').click(function () {
+            getCommentsList(10);
+        });
     </script>
 {% endblock %}
