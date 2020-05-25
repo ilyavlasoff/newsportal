@@ -7,46 +7,73 @@
 
 {% block body %}
     {{ include('components/header.html.twig') }}
-    <div class="content-container">
-        {% if app.user and (app.user.isNewsmaker() or app.user.isAdmin()) %}
-            <div class="flex-row head-tools-container">
-                <a href="{{ path('add_article_page') }}" class="addnew-button"><button class="btn btn-primary">Add a new article</button></a>
+    <div class="page">
+        <div class="content-container">
+            <div class="flex-row">
+                <div class="form-group">
+                    <label for="countOnPageSelect">Count on page:</label>
+                    <select id="countOnPageSelect" class="select-picker">
+                        <option value="5" selected>5</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="1000">1000</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sortModeSelect">Order by:</label>
+                    <select id="sortModeSelect" class="select-picker">
+                        <option value="newer" selected>Newer first</option>
+                        <option value="older">Older first</option>
+                        <option value="views">Views</option>
+                        <option value="discuss">Discussed</option>
+                    </select>
+                </div>
+                {% if app.user and (app.user.isNewsmaker() or app.user.isAdmin()) %}
+                    <div class="flex-row head-tools-container">
+                        <a href="{{ path('add_article_page') }}" class="addnew-button"><button class="btn btn-primary">Add a new article</button></a>
+                    </div>
+                {% endif %}
             </div>
-        {% endif %}
-        <div id="announcesBox"></div>
-        <div class="flex-row">
-            <div class="flex-row" style="justify-content: start">
-                <button class="prev-page btn btn-primary">Previous<i class="fas fa-arrow-left"></i></button>
-            </div>
-            <div id="pagesRow" class="flex-row centered"></div>
-            <div class="flex-row" style="justify-content: end">
-                <button class="next-page btn btn-primary">Next<i class="fas fa-arrow-right"></i></button>
-            </div>
+            <div id="announcesBox"></div>
         </div>
     </div>
+    <div class="flex-row content-container">
+        <div class="flex-row" style="justify-content: start">
+            <button class="prev-page btn btn-primary"><i class="fas fa-arrow-left"></i>Previous</button>
+        </div>
+        <div id="pagesRow" class="flex-row centered"></div>
+        <div class="flex-row" style="justify-content: end">
+            <button class="next-page btn btn-primary">Next<i class="fas fa-arrow-right"></i></button>
+        </div>
+    </div>
+    {{ include('components/footer.html.twig') }}
 {% endblock %}
 {% block javascripts %}
     <script>
         $(document).ready(function () {
-            loadArticlesList(5);
+            $('.select-picker').selectpicker();
+            loadArticlesList();
         });
 
         let currentPage = 0;
         let totalPages = 0;
-        let countOnPage = 5;
 
         function loadArticlesList() {
+            let countSelector = $('#countOnPageSelect');
+            let sortSelector = $('#sortModeSelect');
             $.ajax({
                 type: 'POST',
                 url: '{{ path('articles_list') }}',
                 data: {
-                    count: countOnPage,
-                    offset: currentPage * countOnPage
+                    count: countSelector.val(),
+                    offset: currentPage * countSelector.val(),
+                    sort: sortSelector.val()
                 },
                 success: function (rawData) {
                     let data = JSON.parse(rawData);
-                    totalPages = Math.ceil(data.total / countOnPage);
-                    for (i in data.content)
+                    totalPages = Math.ceil(data.total / countSelector.val());
+                    for (let i in data.content)
                     {
                         let item = data.content[i];
                         let title = item.title;
@@ -58,8 +85,8 @@
                         let commentsCount = item.commentsCount;
 
                         let container = $('<div>', {'class': 'article-announce-container'});
-                        $('<h4>', {'class': 'article-title'}).text(title).appendTo(container);
-                        $('<p>')
+                        $('<h4>', {'class': 'article-title'}).html('<i class="fas fa-align-right"></i> ' + title).appendTo(container);
+                        $('<label>')
                             .append($('<i>', {'class': 'fas fa-calendar'}))
                             .append(`${writingTime.getDate()}.${writingTime.getMonth()}.
                             ${writingTime.getFullYear()} ${writingTime.getHours()}:${writingTime.getMinutes()}`)
@@ -117,17 +144,29 @@
                     currentPage == 0 ? prevButton.attr('disabled', 'true'): prevButton.removeAttr('disabled');
                     currentPage == totalPages - 1 ? nextButton.attr('disabled', 'true'): nextButton.removeAttr('disabled');
 
+                },
+                error: function () {
+                    console.log('Error occured');
                 }
             })
         }
+
+        function reload()
+        {
+            $('#announcesBox').empty();
+            $('#pagesRow').empty();
+            loadArticlesList();
+        }
+
+        $('.select-picker').change(function () {
+            reload();
+        });
 
         $('.prev-page').click(function () {
             if (currentPage > 0)
             {
                 currentPage--;
-                $('#announcesBox').empty();
-                $('#pagesRow').empty();
-                loadArticlesList();
+                reload();
             }
         });
 
@@ -135,9 +174,7 @@
             if (currentPage < totalPages)
             {
                 currentPage++;
-                $('#announcesBox').empty();
-                $('#pagesRow').empty();
-                loadArticlesList();
+                reload();
             }
         });
 

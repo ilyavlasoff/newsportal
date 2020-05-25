@@ -161,6 +161,34 @@ p {
     margin-bottom: 20px;
 }
 
+.page {
+    min-height: 1000px;
+}
+
+.article-announce-container {
+    background-color: #f8f9fa;
+    min-height: 200px;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.article-announce-container + .article-announce-container {
+    margin-bottom: 10px;
+}
+
+.btn > i {
+    color: #FFFFFF;
+}
+
+.form-group + .form-group {
+    margin-right: 20px;
+}
+
+label, label > .fas {
+    font-size: 12px;
+    color: #a4a4a4;
+}
+
 @media screen and (max-width: 1100px) {
     .regform-box {
         max-width: 80%;

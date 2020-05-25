@@ -23,10 +23,11 @@ class ArticlesListController extends AbstractController
         {
             $maxCount = $request->request->get('count');
             $offset = $request->request->get('offset');
+            $sort = $request->request->get('sort');
 
             try
             {
-                $articlesList = $this->databaseOperator->getArticleList(htmlentities($offset), htmlentities($maxCount));
+                $articlesList = $this->databaseOperator->getArticleList(htmlentities($offset), htmlentities($maxCount), htmlentities($sort));
                 $totalCount = $this->databaseOperator->getTotalArticlesCount()[0]['count'];
             }
             catch (\Exception $ex)
@@ -40,7 +41,7 @@ class ArticlesListController extends AbstractController
             ]));
         }
         else {
-            $articlesList = $this->databaseOperator->getArticleList(0, 10);
+            $articlesList = $this->databaseOperator->getArticleList(0, 10, 'newer');
             return $this->render('pages/feed.html.twig', [
                 'articles' => $articlesList
             ]);
@@ -49,9 +50,6 @@ class ArticlesListController extends AbstractController
 
     public function displayPage()
     {
-        $articlesList = $this->databaseOperator->getArticleList(0, 10);
-        return $this->render('pages/feed.html.twig', [
-            'articles' => $articlesList
-        ]);
+        return $this->render('pages/feed.html.twig');
     }
 }

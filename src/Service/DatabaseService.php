@@ -25,7 +25,7 @@ class DatabaseService
         $this->em->flush();
     }
 
-    public function getArticleList(int $offset, int $maxCount)
+    public function getArticleList(int $offset, int $maxCount, string $sort)
     {
         $queryBuilder = $this->em->createQueryBuilder();
         $queryBuilder
@@ -34,9 +34,24 @@ class DatabaseService
             ->innerJoin('App\Entity\User', 'u', Join::WITH, 'a.authorId = u.id')
             ->leftJoin('App\Entity\Comment', 'c', Join::WITH, 'c.toArticle = a.id')
             ->groupBy('a.id, u.id')
-            ->orderBy('a.writingTime', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($maxCount);
+        if ($sort === 'newer')
+        {
+            $queryBuilder->orderBy('a.writingTime', 'DESC');
+        }
+        elseif ($sort === 'older')
+        {
+            $queryBuilder->orderBy('a.writingTime');
+        }
+        elseif ($sort === 'views')
+        {
+            $queryBuilder->orderBy('a.viewsCount', 'DESC');
+        }
+        elseif ($sort === 'discuss')
+        {
+            $queryBuilder->orderBy('COUNT(c.id)', 'DESC');
+        }
         $query = $queryBuilder->getQuery();
         return $query->getResult(Query::HYDRATE_ARRAY);
     }
