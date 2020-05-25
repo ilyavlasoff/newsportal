@@ -26,12 +26,12 @@ class ArticlesListController extends AbstractController
 
             try
             {
-                $articlesList = $this->databaseOperator->getArticleList($offset, $maxCount);
+                $articlesList = $this->databaseOperator->getArticleList(htmlentities($offset), htmlentities($maxCount));
                 $totalCount = $this->databaseOperator->getTotalArticlesCount()[0]['count'];
             }
             catch (\Exception $ex)
             {
-
+                return new JsonResponse(json_encode(['error' => $ex->getMessage()]));
             }
             return new JsonResponse(json_encode([
                 'total' => $totalCount,

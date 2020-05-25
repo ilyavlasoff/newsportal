@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface
 {
     const roleUser = 'ROLE_USER';
-    const roleNewsmakrt = 'ROLE_NEWSMAKER';
+    const roleNewsmaker = 'ROLE_NEWSMAKER';
     const roleAdmin = 'ROLE_ADMIN';
 
     /**
@@ -99,16 +99,27 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = self::roleUser;
+        //$roles[] = self::roleUser;
 
         return array_unique($roles);
     }
 
     public function setRoles(array $roles): self
     {
+        $roles[] = self::roleUser;
         $this->roles = $roles;
 
         return $this;
+    }
+
+    public function isAdmin(): bool
+    {
+        return in_array(self::roleAdmin, $this->roles);
+    }
+
+    public function isNewsmaker(): bool
+    {
+        return in_array(self::roleNewsmaker, $this->roles);
     }
 
     /**

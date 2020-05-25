@@ -21,15 +21,14 @@ class CommentController extends AbstractController
     {
         $count = $request->request->get('count');
         $offset = $request->request->get('offset');
-        $sort = $request->request->get('sort');
 
-        if ($count === null || !is_numeric($count) || $offset === null || !is_numeric($offset) || !$sort)
+        if ($count === null || !is_numeric($count) || $offset === null || !is_numeric($offset))
         {
             return new JsonResponse(json_encode(['error' => 'Invalid request']), Response::HTTP_BAD_REQUEST);
         }
 
-        $article = $this->databaseOperator->getArticle($id);
-        $comments = $this->databaseOperator->getComments($article, $count, $offset);
+        $article = $this->databaseOperator->getArticle(htmlentities($id));
+        $comments = $this->databaseOperator->getComments($article, htmlentities($count), htmlentities($offset));
 
         return new JsonResponse(json_encode(['count' => count($comments),'comments' => $comments]));
     }
@@ -47,7 +46,7 @@ class CommentController extends AbstractController
         try
         {
             $article = $this->databaseOperator->getArticle($id);
-            $commentId = $this->databaseOperator->addComment($content, $article, $user);
+            $commentId = $this->databaseOperator->addComment(htmlentities($content), $article, $user);
         }
         catch (\Exception $ex)
         {
@@ -70,7 +69,7 @@ class CommentController extends AbstractController
 
         try
         {
-            $this->databaseOperator->editComment($id, $content);
+            $this->databaseOperator->editComment(htmlentities($id), htmlentities($content));
         }
         catch (\Exception $ex)
         {
@@ -92,7 +91,7 @@ class CommentController extends AbstractController
 
         try
         {
-            $this->databaseOperator->deleteComment($id);
+            $this->databaseOperator->deleteComment(htmlentities($id));
         }
         catch (\Exception $ex)
         {

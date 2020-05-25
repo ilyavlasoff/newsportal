@@ -40,7 +40,7 @@ class ArticleOperationsController extends AbstractController
         {
             try
             {
-                $this->databaseOperator->deleteArticle($id);
+                $this->databaseOperator->deleteArticle(htmlentities($id));
             }
             catch (\Exception $ex)
             {
@@ -94,7 +94,7 @@ class ArticleOperationsController extends AbstractController
 
         return $this->render('pages/add_article_page.html.twig', [
             'addArticleForm' => $addArticleForm->createView(),
-            'title' => 'Add an article',
+            'title' => 'Add an article ',
             'edited' => false
         ]);
     }

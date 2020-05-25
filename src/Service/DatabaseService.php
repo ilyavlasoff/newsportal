@@ -34,7 +34,7 @@ class DatabaseService
             ->innerJoin('App\Entity\User', 'u', Join::WITH, 'a.authorId = u.id')
             ->leftJoin('App\Entity\Comment', 'c', Join::WITH, 'c.toArticle = a.id')
             ->groupBy('a.id, u.id')
-            ->orderBy('a.writingTime')
+            ->orderBy('a.writingTime', 'DESC')
             ->setFirstResult($offset)
             ->setMaxResults($maxCount);
         $query = $queryBuilder->getQuery();
@@ -63,16 +63,6 @@ class DatabaseService
         $visitCount = $article->getViewsCount();
         $article->setViewsCount(++$visitCount);
         $this->em->flush();
-    }
-
-    public function getTagsToArticle(Article $article)
-    {
-
-    }
-
-    public function getAllTags()
-    {
-        return $this->em->getRepository(Tag::class)->findAll();
     }
 
     public function getTotalArticlesCount()
