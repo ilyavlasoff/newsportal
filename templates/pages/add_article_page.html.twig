@@ -7,40 +7,53 @@
 
 {% block body %}
     {{ include('components/header.html.twig') }}
-    <div class="flex-col centered top-margined">
-        <div class="title-pic-sm">
-            <img src="{{ asset('media/images/person_with_notebook.jpg') }}" class="pic-cover" alt="Register image">
+    <div class="page">
+        <div class="flex-col centered top-margined">
+            <div class="title-pic-sm">
+                <img src="{{ asset('media/images/person_with_notebook.jpg') }}" class="pic-cover" alt="Register image">
+            </div>
+            <h1 class="title text-center">{{ title }}</h1>
+            {% if edited %}
+                <h5>Published at: {{ firstPublishtime | date('yy.m.d h:i') }}</h5>
+                <h5>Views: {{ viewsCount }}</h5>
+            {% endif %}
         </div>
-        <h1 class="title text-center">{{ title }}</h1>
-        {% if edited %}
-            <h5>Published at: {{ firstPublishtime | date('yy.m.d h:i') }}</h5>
-            <h5>Views: {{ viewsCount }}</h5>
-        {% endif %}
-    </div>
-    <div class="content-container">
-
-        <div>
-            {{ form_start(addArticleForm) }}
-            <div class="form-group">
-                <label for="formAddTitle">{{ form_label(addArticleForm.title) }}</label>
-                {{ form_widget(addArticleForm.title, {'attr': {'class': 'form-control', 'id': 'formAddTitle'}}) }}
+        <div class="content-container">
+            <div>
+                {{ form_start(addArticleForm) }}
+                {% set formErrors = addArticleForm.vars.errors.form.getErrors(true) %}
+                {% if formErrors|length %}
+                    <div class="alert alert-danger">
+                        <label>Can not register due to these errors:</label>
+                        <ul>
+                            {% for error in formErrors %}
+                                <li>{{ error.message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="formAddTitle">{{ form_label(addArticleForm.title) }}</label>
+                    {{ form_widget(addArticleForm.title, {'attr': {'class': 'form-control', 'id': 'formAddTitle'}}) }}
+                </div>
+                <div class="form-group">
+                    <label for="formAddTitle">{{ form_label(addArticleForm.tags) }}</label>
+                    {{ form_widget(addArticleForm.tags, {'attr': {'class': 'form-control', 'id': 'tagsChoice', 'data-live-search': 'true'}}) }}
+                </div>
+                <div class="form-group">
+                    <label for="formAddDescription">{{ form_label(addArticleForm.description) }}</label>
+                    {{ form_widget(addArticleForm.description, {'attr': {'class': 'form-control', 'id': 'formAddDescription', 'rows': '8'}}) }}
+                </div>
+                <div class="form-group">
+                    <label for="formAddContent">{{ form_label(addArticleForm.content) }}</label>
+                    {{ form_widget(addArticleForm.content, {'attr': {'class': 'form-control', 'id': 'formAddContent', 'rows': '20'}}) }}
+                </div>
+                {{ form_row(addArticleForm.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+                {{ form_end(addArticleForm) }}
             </div>
-            <div class="form-group">
-                <label for="formAddTitle">{{ form_label(addArticleForm.tags) }}</label>
-                {{ form_widget(addArticleForm.tags, {'attr': {'class': 'form-control', 'id': 'tagsChoice', 'data-live-search': 'true'}}) }}
-            </div>
-            <div class="form-group">
-                <label for="formAddDescription">{{ form_label(addArticleForm.description) }}</label>
-                {{ form_widget(addArticleForm.description, {'attr': {'class': 'form-control', 'id': 'formAddDescription', 'rows': '8'}}) }}
-            </div>
-            <div class="form-group">
-                <label for="formAddContent">{{ form_label(addArticleForm.content) }}</label>
-                {{ form_widget(addArticleForm.content, {'attr': {'class': 'form-control', 'id': 'formAddContent', 'rows': '20'}}) }}
-            </div>
-            {{ form_row(addArticleForm.submit, {'attr': {'class': 'btn btn-primary'}}) }}
-            {{ form_end(addArticleForm) }}
         </div>
     </div>
+    {{ include('components/footer.html.twig') }}
 {% endblock %}
 {% block javascripts %}
     <script>

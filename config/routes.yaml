@@ -36,7 +36,7 @@ comment_list:
     methods:
         - POST
 add_comment:
-    path: /article/{id}/add-comment
+    path: /article/add-comment/{id}
     controller: App\Controller\CommentController::addComment
     methods:
         - POST
@@ -59,10 +59,10 @@ article_page:
     path: /article/{id}
     controller: App\Controller\FullPageArticleController::displayPage
 edit_article:
-    path: /article/{id}/edit
+    path: /article/edit/{id}
     controller: App\Controller\ArticleOperationsController::editArticle
 delete_article:
-    path: /article/{id}/delete
+    path: /article/delete/{id}
     controller: App\Controller\ArticleOperationsController::deleteArticle
     methods:
         - POST

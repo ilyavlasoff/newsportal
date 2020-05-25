@@ -8,47 +8,44 @@
 {% block body %}
     {{ include('components/header.html.twig') }}
     <div hidden data-user-name="{{ app.user }}" data-user-admin="{{ app.user.isAdmin()|default('0') ? '1': '0' }}" id="auth"></div>
-    <div class="content-container">
-        <div class="flex-col centered top-margined">
-            <div class="title-pic-sm">
-                <img src="{{ asset('media/images/person_with_notebook.jpg') }}" class="pic-cover" alt="Register image">
-            </div>
-            <h1 class="title text-center">{{ article.title }}
-                {% if app.user and (app.user == article.authorId or app.user.isAdmin()) %}
-                    <a href="{{ path('edit_article', {'id': article.id}) }}"><i class="fas fa-edit fa-xs"></i></a>
-                    <i class="fas fa-trash-alt fa-xs" id="deleteArticleButton"></i>
-                {% endif %}
-            </h1>
-            <label>
-                <span><i class="far fa-calendar"></i> {{ article.writingTime | date('Y-m-d H:i') }}</span>
-                <span><i class="fas fa-eye"></i> {{ article.viewsCount }}</span>
+    <div class="page">
+        <div class="content-container">
+            <div class="flex-col centered top-margined">
+                <h1 class="title text-center">{{ article.title }}
+                    {% if app.user and (app.user == article.authorId or app.user.isAdmin()) %}
+                        <a href="{{ path('edit_article', {'id': article.id}) }}"><i class="fas fa-edit fa-xs"></i></a>
+                        <i class="fas fa-trash-alt fa-xs" id="deleteArticleButton"></i>
+                    {% endif %}
+                </h1>
+                <label>
+                    <span><i class="far fa-calendar"></i> {{ article.writingTime | date('Y-m-d H:i') }}</span>
+                    <span><i class="fas fa-eye"></i> {{ article.viewsCount }}</span>
+                </label>
                 <div class="tags-container">
                     {% for tag in article.tags %}
-                        <span class="tag">{{ tag.tagTitle }}</span>
+                        <label class="tag">{{ tag.tagTitle }}</label>
                     {% endfor %}
                 </div>
-            </label>
-        </div>
-        <div>
-            <h6 class="description">{{ article.description }}</h6>
-        </div>
-        <div>
-            <p>{{ article.content }}</p>
-        </div>
-        <div class="flex centered">
-            <h4>Comments:</h4>
-        </div>
-        <div class="flex-row bottom-margined30 bottom-margined30">
-            <button id="addComment" class="btn btn-primary add-comment-btn">Add comment</button>
-        </div>
-        <div class="comment-box" id="addCommentBox">
-            <div class="input-group">
-                <textarea class="form-control commentInputArea"></textarea>
             </div>
-            <button type="button" class="btn btn-primary" id="submitComment">Send</button>
+            <div>
+                <h6 class="description">{{ article.description }}</h6>
+            </div>
+            <div>
+                <p>{{ article.content }}</p>
+            </div>
+            <h4 id="commentsTitle" style="text-align: center;">Comments:</h4>
+            <div class="flex-row bottom-margined30 bottom-margined30">
+                <button id="addComment" class="btn btn-primary add-comment-btn">Add comment</button>
+            </div>
+            <div class="comment-box" id="addCommentBox">
+                <div class="input-group">
+                    <textarea class="form-control commentInputArea"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" id="submitComment">Send</button>
+            </div>
+            <div id="comments"></div>
+            <button type="button" id="loadMoreButton" class="btn btn-primary">Load more</button>
         </div>
-        <div id="comments"></div>
-        <button type="button" id="loadMoreButton" class="btn btn-primary">Load more</button>
     </div>
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -67,6 +64,7 @@
             </div>
         </div>
     </div>
+    {{ include('components/footer.html.twig') }}
 {% endblock %}
 {% block javascripts %}
     <script>
@@ -135,8 +133,8 @@
                     if (loaded === 0)
                     {
                         commentContainer.empty();
-                        $('#loadMoreButton').css('display', 'none');
-                        $('<h4>').append('No comments yet').appendTo(commentContainer);
+                        $('#loadMoreButton').remove();
+                        $('#commentsTitle').text('No comments yet').appendTo(commentContainer);
                         return;
                     }
 
@@ -189,7 +187,8 @@
                     }
                 },
                 error: function (rawData) {
-                    $('#comments').append('Sorry:( Error occured when downloading content');
+                    $('#loadMoreButton').remove();
+                    $('#commentsTitle').text('Sorry:( Error occured when downloading content');
                     console.log('Error occured');
                 }
             })

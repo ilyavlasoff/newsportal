@@ -37,7 +37,15 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/comment, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/article/add-comment, roles: ROLE_USER }
+        - { path: ^/article/add, roles: [ROLE_NEWSMAKER, ROLE_ADMIN] }
+        - { path: ^/article/edit, roles: [ROLE_NEWSMAKER, ROLE_ADMIN] }
+        - { path: ^/article/delete, roles: [ROLE_NEWSMAKER, ROLE_ADMIN] }
+        - { path: ^/comment/edit, roles: ROLE_USER }
+        - { path: ^/comment/delete, roles: ROLE_USER }
         - { path: ^/customize, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/user, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # - { path: ^/admin, roles: ROLE_ADMIN }

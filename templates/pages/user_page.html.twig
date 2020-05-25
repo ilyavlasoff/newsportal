@@ -7,16 +7,23 @@
 {% endblock %}
 {% block body %}
     {{ include('components/header.html.twig') }}
-    <div class="content-container">
-        <div>
-            <div class="title-pic">
-                <img src="{{ asset('public/App/media/' ~ user.getUserPic()) }}" class="pic-cover" alt="Register image" id="previewImg">
+    <div class="page">
+        <div class="content-container">
+            <div>
+                <div class="title-pic">
+                    <img src="{{ asset('public/App/media/' ~ user.getUserPic()) }}" class="pic-cover" alt="Register image" id="previewImg">
+                </div>
+                <h1 class="title">{{ user.username }}</h1>
             </div>
-            <h1 class="title">{{ user.username }}</h1>
+            <h4 class="sub-title">{{ user.email }}</h4>
+            {% if user.isNewsmaker() %}
+                <p>Current role: newsmaker (it means you can read, write and manage your articles)</p>
+            {% elseif user.isAdmin() %}
+                <p>Current role: admin (it means you can read, write and manage all articles, edit and delete comments)</p>
+            {% else %}
+                <p>Current role: user (it means you can read articles and leave comments)</p>
+            {% endif %}
         </div>
-        <h4 class="sub-title">{{ user.getDescription() }}</h4>
-        {% if(app.user.id == user.id) %}
-            <div><button type="button" class="btn btn-primary">Configure profile</button></div>
-        {% endif %}
     </div>
+    {{ include('components/footer.html.twig') }}
 {% endblock %}
