@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Article;
 use App\Entity\Comment;
+use App\Entity\Tag;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
@@ -67,6 +68,11 @@ class DatabaseService
     public function getTagsToArticle(Article $article)
     {
 
+    }
+
+    public function getAllTags()
+    {
+        return $this->em->getRepository(Tag::class)->findAll();
     }
 
     public function getTotalArticlesCount()

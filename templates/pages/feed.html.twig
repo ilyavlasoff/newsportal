@@ -14,38 +14,42 @@
         </div>
         <div id="announcesBox"></div>
         <div class="flex-row">
-            <button class="prev-page btn btn-primary">Previous<i class="fas fa-arrow-left"></i></button>
-            <div id="pagesRow"></div>
-            <button class="next-page btn btn-primary">Next<i class="fas fa-arrow-right"></i></button>
+            <div class="flex-row" style="justify-content: start">
+                <button class="prev-page btn btn-primary">Previous<i class="fas fa-arrow-left"></i></button>
+            </div>
+            <div id="pagesRow" class="flex-row centered"></div>
+            <div class="flex-row" style="justify-content: end">
+                <button class="next-page btn btn-primary">Next<i class="fas fa-arrow-right"></i></button>
+            </div>
         </div>
     </div>
 {% endblock %}
 {% block javascripts %}
     <script>
         $(document).ready(function () {
-            loadArticlesList(10);
+            loadArticlesList(5);
         });
 
-        let loadedItemsCount = 0;
-        let totalCount = 0;
+        let currentPage = 0;
+        let totalPages = 0;
+        let countOnPage = 5;
 
-        function loadArticlesList(count) {
+        function loadArticlesList() {
             $.ajax({
                 type: 'POST',
                 url: '{{ path('articles_list') }}',
                 data: {
-                    count: count,
-                    offset: loadedItemsCount
+                    count: countOnPage,
+                    offset: currentPage * countOnPage
                 },
                 success: function (rawData) {
                     let data = JSON.parse(rawData);
-                    totalCount = data.total;
-                    loadedItemsCount += data.loaded;
+                    totalPages = Math.ceil(data.total / countOnPage);
                     for (i in data.content)
                     {
                         let item = data.content[i];
                         let title = item.title;
-                        let writingTime = Date.parse(item.writingTime);
+                        let writingTime = new Date(item.writingTime.date);
                         let viewsCount = item.viewsCount;
                         let username = item.username;
                         let description = item.description;
@@ -56,7 +60,8 @@
                         $('<h4>', {'class': 'article-title'}).text(title).appendTo(container);
                         $('<p>')
                             .append($('<i>', {'class': 'fas fa-calendar'}))
-                            .append(writingTime.toString())
+                            .append(`${writingTime.getDate()}.${writingTime.getMonth()}.
+                            ${writingTime.getFullYear()} ${writingTime.getHours()}:${writingTime.getMinutes()}`)
                             .append($('<i>', {'class': 'fas fa-eye'}))
                             .append(viewsCount)
                             .append($('<i>', {'class': 'fas fa-user-tie'}))
@@ -73,26 +78,67 @@
                         $('#announcesBox').append(container);
                     }
 
-                    let pagesCount = Math.ceil(totalCount/count);
-                    let currentPage = Math.floor(loadedItemsCount / count) + 1;
-
-                    if (pagesCount > 5)
+                    if (totalPages > 5)
                     {
-                        let lower = Math.max(currentPage - 2, 1);
-                        let higner = Math.min(currentPage + 2, pagesCount);
-                        for(let i = lower; i <= higner; ++i)
+                        let lower = Math.max(currentPage - 2, 0);
+                        let higher = Math.min(currentPage + 2, totalPages - 1);
+                        for(let i = lower; i <= higher; ++i)
                         {
-                            $('#pagesRow').append($('<a>').text(i));
+                            let btnClass;
+                            if (i == currentPage)
+                                btnClass = 'btn btn-secondary btn-sm pageSelector';
+                            else
+                                btnClass = `btn btn-primary btn-sm pageSelector`
+                            $('#pagesRow').append($('<button>', {'class': btnClass, 'data-page-num': i }).text(i + 1));
                         }
                     }
                     else {
-                        for(let i = 0; i !== pagesCount; ++i)
+                        for(let i = 0; i !== totalPages; ++i)
                         {
-                            $('#pagesRow').append($('<a>').text(i + 1));
+                            let btnClass;
+                            if (i == currentPage)
+                                btnClass = 'btn btn-secondary btn-sm pageSelector';
+                            else
+                                btnClass = `btn btn-primary btn-sm pageSelector`
+                            $('#pagesRow').append($('<button>', {'class': btnClass, 'data-page-num': i }).text(i));
                         }
                     }
+
+                    $('.pageSelector').click(function () {
+                        currentPage = $(this).attr('data-page-num');
+                        $('#announcesBox').empty();
+                        $('#pagesRow').empty();
+                        loadArticlesList();
+                    });
+
+                    let prevButton = $('.prev-page');
+                    let nextButton = $('.next-page');
+                    currentPage === 0 ? prevButton.attr('disabled', 'true'): prevButton.removeAttr('disabled');
+                    currentPage === totalPages - 1 ? nextButton.attr('disabled', 'true'): nextButton.removeAttr('disabled');
+
                 }
             })
         }
+
+        $('.prev-page').click(function () {
+            if (currentPage > 0)
+            {
+                currentPage--;
+                $('#announcesBox').empty();
+                $('#pagesRow').empty();
+                loadArticlesList();
+            }
+        });
+
+        $('.next-page').click(function () {
+            if (currentPage < totalPages)
+            {
+                currentPage++;
+                $('#announcesBox').empty();
+                $('#pagesRow').empty();
+                loadArticlesList();
+            }
+        });
+
     </script>
 {% endblock %}

@@ -120,6 +120,7 @@ p {
 
 .fas {
     color: #515151;
+    margin-right: 5px;
 }
 
 .btn {
@@ -147,6 +148,17 @@ p {
 
 #addCommentBox {
     display: none;
+}
+
+.tag {
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #e4f2fe;
+}
+
+.tags-container {
+    margin-top: 15px;
+    margin-bottom: 20px;
 }
 
 @media screen and (max-width: 1100px) {

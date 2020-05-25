@@ -18,11 +18,16 @@
         {% endif %}
     </div>
     <div class="content-container">
+
         <div>
             {{ form_start(addArticleForm) }}
             <div class="form-group">
                 <label for="formAddTitle">{{ form_label(addArticleForm.title) }}</label>
                 {{ form_widget(addArticleForm.title, {'attr': {'class': 'form-control', 'id': 'formAddTitle'}}) }}
+            </div>
+            <div class="form-group">
+                <label for="formAddTitle">{{ form_label(addArticleForm.tags) }}</label>
+                {{ form_widget(addArticleForm.tags, {'attr': {'class': 'form-control', 'id': 'tagsChoice', 'data-live-search': 'true'}}) }}
             </div>
             <div class="form-group">
                 <label for="formAddDescription">{{ form_label(addArticleForm.description) }}</label>
@@ -36,4 +41,11 @@
             {{ form_end(addArticleForm) }}
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $('select').selectpicker();
+        })
+    </script>
 {% endblock %}
